@@ -7,7 +7,12 @@
 #' @param var_name: A vector of interested variable name, default is null
 #' @return A vector of column names in data that do not change with
 #' time variable
-#' @import tidyr
+#' @importFrom tidyr spread
+#' @export
+#' @examples
+#' data("ECAM")
+#' invariants(ECAM, 'studyid', 'month_of_life')
+
 invariants <- function(data, unique_subject_id, time_name,
                        var_name = NULL){
   if (!is.null(var_name)) {
@@ -17,8 +22,9 @@ invariants <- function(data, unique_subject_id, time_name,
   }
 
   var_invariant <- c()
-  for (i in 1:length(var_names)) {
-    var_temp <- var_names[i]
+  for (i in 1:length(var_name)) {
+    var_temp <- var_name[i]
+
 
     #skip id, time and constant variable
     if (var_temp == unique_subject_id) next

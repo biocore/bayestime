@@ -1,0 +1,141 @@
+---
+title: "BayesTime-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bayestime-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE}
+devtools::load_all(".")
+library(BayesTime)
+```
+This vignette introduces the BayesTime package by a workflow with real data example. This helps those who are unfamiliar with BayesTime package and want to use its functions to analyze longitudinal data. ***
+
+# Overview
+(Whate BayesTime does)***
+
+We take ECAM data as an example to go through each function in BayesTime.
+```{r}
+data("ECAM")
+head(ECAM)
+```
+# Workflow
+## plot_qqplot(): Check if data is normally distributed
+Since model fitting requires a normally distributed variable, we first need to check if the response variable needs any transformation. BayesTime::plot_qqplot() takes a dataframe and a column name of response variable to generate qqPlot of the original, log transformation, and square root of the response variable. 
+```{r, fig.height = 6, fig.width=6, results=FALSE}
+plot_qqplot(ECAM, 'shannon')
+```
+
+We can see that the original response vairable is more normally distributed than other transformation. So we keep the data as it is, otherwise the variable needs to be transformed.
+
+## prepare_data(): Preprocess data before modeling
+BayesTime::prepare_data() transforms a dataframe object to a list for stan modeling. This dataframe needs the column names of unique subject id for each subject, time variable, and a column of response vairable. There are three options to set the response variable: standardize, center or NULL, default is standardize. This function also can set whether to scale time variable, default is FALSE. 
+
+* Attention: Each subject can only have one unqiue measurement at each time point. Function will stop and print out error message if this situation is not handled.
+
+```{r}
+ECAM <- ECAM[!duplicated(ECAM[, c('studyid', 'month_of_life')]), ]
+dat <- prepare_data(data = ECAM, unique_subject_id = 'studyid', time_name = 'month_of_life',
+                    response_name = 'shannon', transform_y = 'standardize', scale_time = T)
+summary(dat)
+```
+
+##  invariants(): Get invariant variables in data
+BayesTime::invariants() helps to obtian a set of variables that is not changed through time for each subject and excludes the variables that are same for all subjects. This takes a dataframe, column names of unique subject id , time, and a vector of interested variable names. The default instersted variable names parameter is set to NULL, then the function will look over all vairables in data.
+```{r}
+invars <- invariants(ECAM, 'studyid', 'month_of_life')
+invars
+```
+
+## plot_group(): Generate spaghetti plots by group
+BayesTime::plot_group() generates the spaghetti plot of interested variables by group. This takes the logitudinal data frame, the column name of time variable, column name of response variable, column name of unique subject id and a vector of column names of interested variables.
+```{r}
+plot_group(data = ECAM, time_name = 'month_of_life', response_name = 'shannon',
+           unique_subject_id = 'studyid', group_name = invars)
+```
+
+## stan_fit(): Get invariant variables in data
+BayesTime::stan_fit() is the core function to fit longitudinal data. This takes the list of data from prepare_data(), number of samples and chains in stan modelling, and the number of PC and knot. stan_fit() will loop through each pc and knot number and return a list of stan models with respective pc and knot. ***(more explanation)
+* This process may take a lot of time even if the pc and knot number are small. We recommend to save the stan modeling results to save time.
+
+```{r}
+#sfpca_stan_results <- stan_fit(data = dat, Nsamples = 1000, Nchain = 3,
+#                         PC_max = 3, D_max = 3)
+load('~/Dropbox/lab/SFPCA/results_pkg/stan.RData')
+```
+
+## optimal(): Get the optimal model
+BayesTime::optimal() takes a list of fitted stan models and use loo_compare() from loo package. This prints out the compare results and return the optimal stan model.
+```{r}
+optimal_model <- optimal(sfpca_stan_results)
+summary(optimal_model)
+```
+
+## plot_k_diagnostic(): Plot diagnostic figure
+BayesTime::plot_k_diagnostic() takes data list from prepare_data() and the optimal stan model. This helps to evaluate the fitting result.***
+```{r, fig.height = 4, fig.width=8}
+plot_k_diagnostic(dat, optimal_model)
+```
+
+## plot_density_overlay(): Plot the figure of overlay densities
+BayesTime::plot_density_overlay() takes data list from prepare_data() and the optimal stan model. This helps to evaluate the fitting result.***
+```{r, fig.height = 4, fig.width=8}
+plot_density_overlay(dat, optimal_model)
+```
+
+## basis_setup_sparse(): ***
+```{r}
+model_basis <- basis_setup_sparse(dat, nknots = optimal_model$knot, orth=TRUE)
+summary(model_basis)
+```
+
+## post_hoc_rotation(): ***
+```{r}
+model_rotation <- post_hoc_rotation(dat, model = optimal_model)
+summary(model_rotation)
+```
+
+## output_results(): ***
+```{r}
+model_output <- output_results(sfpca_data = dat, variables = invars, basis = model_basis,
+               rotation = model_rotation)
+summary(model_output)
+```
+
+## sfpca_rda(): RDA analysis by fpc scores
+BayesTime::sfpca_rda() automates the rda analysis using rda() from vegan package. This takes the output list from output_results(), stan model from optimal(), and a set of variables self-input or from invariants(). It returns the table and ggplot of the rda analysis results.
+```{r, results=FALSE, fig.height = 4, fig.width=4}
+model_rda <- sfpca_rda(model_output, optimal_model, invars)
+model_rda
+```
+
+## plot_residual(): Residual plot of the model
+BayesTime::plot_residual() takes the output from output_results() and generates the residual plot of the fit model.
+```{r, fig.width=6, results=FALSE}
+plot_residual(model_output)
+```
+
+## plot_mean_curve(): ***
+```{r}
+plot_mean_curve(sfpca_data = dat, basis = model_basis, output = model_output,
+                id_name = 'studyid', time_name = 'month_of_life',
+                response_name = 'shannon', ymin=NULL, ymax=NULL)
+```
+
+## plot_fpc_boxplot(): Generate boxplot for fpc score by group
+BayesTime::plot_fpc_boxplot() generates the boxplot of fpc scores from sfpca model and compare them by group. This function takes the output list from output_results() and the vector of variables that are invariant with time.
+```{r}
+plot_fpc_boxplot(output = model_output, group_name = invars)
+```
+
+## plot_fpc_curve(): 
