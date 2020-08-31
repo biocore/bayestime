@@ -4,7 +4,7 @@
 \alias{output_results}
 \title{generate sfpca models with different parameters}
 \usage{
-output_results(data, variables, basis, rotation)
+output_results(sfpca_data, variables, basis, rotation)
 }
 \arguments{
 \item{data:}{The prepared data from prepare_data() function}

@@ -10,7 +10,7 @@ optimal(model_list)
 \item{model_list:}{A list of sfpca models with different parameters}
 }
 \value{
-One sfpca model with the optimal result
+The sfpca model with the optimal result
 }
 \description{
 A function to compare sfpca model restuls and return the optimal one

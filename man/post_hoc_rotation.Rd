@@ -7,12 +7,12 @@
 post_hoc_rotation(sfpca_data, model)
 }
 \arguments{
-\item{model}{The picked sfpca model}
+\item{model}{The optimal sfpca model}
 
-\item{data:}{The prepared data from prepare_data() function}
+\item{sfpca_data:}{The prepared data from prepare_data() function}
 }
 \value{
-A list after post hoc rotation (need change)
+A list after post hoc rotation (***)
 }
 \description{
 perform post hoc rotation

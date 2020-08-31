@@ -5,6 +5,9 @@
 #' @param basis: The list of basis results from basis_setup_sparse()
 #' @param rotation: The list of rotation results from post_hoc_rotation()
 #' @return A list of results from sfpca model and function
+#' @importFrom Matrix bdiag
+#' @export
+
 output_results <- function(sfpca_data, variables, basis, rotation){
   npcs <- rotation$npcs
   ALPHA_array <- rotation$alpha_new
@@ -33,7 +36,9 @@ output_results <- function(sfpca_data, variables, basis, rotation){
   ALPHA_mean <- cbind(ALPHA_mean / (last - first + 1))
   THETA_mean <- cbind(THETA_mean / (last - first + 1))
 
-  Mu_functions <- t(bdiag(cbind(phi_t_cont))) %*% MU_mean
+  Mu_functions_temp <- Matrix::bdiag(cbind(phi_t_cont))
+  Mu_functions <- t(as.matrix(Mu_functions_temp)) %*% MU_mean
+
   FPC_mean <- t(phi_t_cont) %*% THETA_mean
 
   vars_complete <- c('ID', 'time', 'response', variables)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_mean_curve.R
 \name{plot_mean_curve}
 \alias{plot_mean_curve}
-\title{A function to draw diganostic plot}
+\title{A function to plot mean curces}
 \usage{
 plot_mean_curve(
   sfpca_data,
@@ -11,8 +11,8 @@ plot_mean_curve(
   id_name,
   time_name,
   response_name,
-  variables,
-  ymin = NULL
+  ymin = NULL,
+  ymax = NULL
 )
 }
 \arguments{
@@ -21,5 +21,5 @@ plot_mean_curve(
 \item{sfpca_model:}{A list of sfpca models with different parameters}
 }
 \description{
-A function to draw diganostic plot
+A function to plot mean curces
 }

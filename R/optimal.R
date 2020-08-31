@@ -1,7 +1,9 @@
 #' A function to compare sfpca model restuls and return the optimal one
 #'
 #' @param model_list: A list of sfpca models with different parameters
-#' @return One sfpca model with the optimal result
+#' @return The sfpca model with the optimal result
+#' @export
+
 optimal <- function(model_list){
   len <- length(model_list)
   looic.list <- lapply(1:len, function(i) model_list[[i]]$looic)

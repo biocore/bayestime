@@ -19,19 +19,25 @@ prepare_data(
 
 \item{unique_subject_id}{the column name corresponding to unique subject id in the data (string)}
 
-\item{time_name:}{the column name corresponding to the time variable in the data (string)}
+\item{time_name}{the column name corresponding to the time variable in the data (string)}
 
-\item{response_name:}{the column name of the intersted response variable (string)}
+\item{response_name}{the column name of the intersted response variable (string)}
 
-\item{transform_y:}{the ways of transforming the response variable: standardize/center/NULL}
+\item{transform_y}{the ways of transforming the response variable: standardize/center/NULL}
 
-\item{scale_time:}{the option of whether or not to scale the time variable to be within \link{0, 1} (True/False)}
+\item{scale_time}{the option of whether or not to scale the time variable to be within \link{0, 1} (True/False)}
 
-\item{group_name:}{the column name of group id, set to NA if no input}
+\item{group_name}{the column name of group id, set to NA if no input}
 }
 \value{
 A list containing the prepared data for sfpca model
 }
 \description{
 prepare data for sfpca model
+}
+\examples{
+data("ECAM")
+ECAM <- ECAM[!duplicated(ECAM[, c('studyid', 'month_of_life')]), ]
+dat <- prepare_data(ECAM, unique_subject_id = 'studyid', time_name = 'month_of_life',
+                   response_name = 'shannon', transform_y='standardize', scale_time=T)
 }

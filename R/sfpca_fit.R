@@ -32,8 +32,9 @@ sfpcaClass <- function(Nsamples = NULL, Nchains = NULL, pc=NULL, knot=NULL,
 #' @import methods
 #' @importFrom rstan sampling
 #' @useDynLib BayesTime, .registration = TRUE
+#' @export
 
-sfpca_fit <- function(sfpca_data, Nsamples, Nchains, PC_max, D_max){
+stan_fit <- function(data, Nsamples, Nchains, PC_max, D_max){
   sfpca_results <- list()
   i <- 0
   for (k in 1:PC_max) {
@@ -43,18 +44,18 @@ sfpca_fit <- function(sfpca_data, Nsamples, Nchains, PC_max, D_max){
       sfpca$pc <- k
       sfpca$knot <- d
       print(paste('index i is:', i, 'number of PC:', k, 'number of knots:', d))
-      results_basis <- basis_setup_sparse(sfpca_data = sfpca_data,
+      results_basis <- basis_setup_sparse(sfpca_data = data,
                                           nknots = d, orth = TRUE)
-      pca_data <- list(N = sfpca_data$num_subjects,
+      pca_data <- list(N = data$num_subjects,
                        K = k,
                        Q = d + 4,
-                       Y = sfpca_data$response.list,
-                       V = sfpca_data$visits.vector,
-                       subject_starts = sfpca_data$visits.start,
-                       subject_stops = sfpca_data$visits.stop,
-                       cov_starts = sfpca_data$cov.start,
-                       cov_stops = sfpca_data$cov.stop,
-                       cov_size = sfpca_data$cov.size,
+                       Y = data$response.list,
+                       V = data$visits.vector,
+                       subject_starts = data$visits.start,
+                       subject_stops = data$visits.stop,
+                       cov_starts = data$cov.start,
+                       cov_stops = data$cov.stop,
+                       cov_size = data$cov.size,
                        B = results_basis$orth_spline_basis_sparse_stacked)
 
       set.seed(31)

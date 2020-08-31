@@ -2,12 +2,19 @@
 #'
 #' @param data target longitudinal data for analysis (must be a data frame)
 #' @param unique_subject_id the column name corresponding to unique subject id in the data (string)
-#' @param time_name: the column name corresponding to the time variable in the data (string)
-#' @param response_name: the column name of the intersted response variable (string)
-#' @param transform_y: the ways of transforming the response variable: standardize/center/NULL
-#' @param scale_time: the option of whether or not to scale the time variable to be within [0, 1] (True/False)
-#' @param group_name: the column name of group id, set to NA if no input
+#' @param time_name the column name corresponding to the time variable in the data (string)
+#' @param response_name the column name of the intersted response variable (string)
+#' @param transform_y the ways of transforming the response variable: standardize/center/NULL
+#' @param scale_time the option of whether or not to scale the time variable to be within [0, 1] (True/False)
+#' @param group_name the column name of group id, set to NA if no input
 #' @return A list containing the prepared data for sfpca model
+#' @export
+#' @examples
+#' data("ECAM")
+#' ECAM <- ECAM[!duplicated(ECAM[, c('studyid', 'month_of_life')]), ]
+#' dat <- prepare_data(ECAM, unique_subject_id = 'studyid', time_name = 'month_of_life',
+#'                    response_name = 'shannon', transform_y='standardize', scale_time=T)
+
 prepare_data = function(data, unique_subject_id, time_name, response_name,
                         transform_y='standardize', scale_time=FALSE, group_name = NULL){
 
