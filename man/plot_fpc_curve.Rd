@@ -4,15 +4,9 @@
 \alias{plot_fpc_curve}
 \title{A function to plot fpc curves}
 \usage{
-plot_fpc_curve(data, response_name, basis, output, rotation)
+plot_fpc_curve(output)
 }
 \arguments{
-\item{data}{A data frame for longitudinal analysis}
-
-\item{response_name}{The name of response variable}
-
-\item{basis}{The model basis results list from basis_setup_sparse() function}
-
 \item{output}{The model output list from output_results() function}
 }
 \description{

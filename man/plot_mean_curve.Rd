@@ -4,21 +4,14 @@
 \alias{plot_mean_curve}
 \title{A function to plot mean curces}
 \usage{
-plot_mean_curve(
-  sfpca_data,
-  basis,
-  output,
-  id_name,
-  time_name,
-  response_name,
-  ymin = NULL,
-  ymax = NULL
-)
+plot_mean_curve(output, ymin = NULL, ymax = NULL)
 }
 \arguments{
-\item{sfpca_data:}{The prepared data from prepare_data() function (list)}
+\item{output:}{The model output from output_results() function}
 
-\item{sfpca_model:}{A list of sfpca models with different parameters}
+\item{ymin:}{Manually set minimum of y lab}
+
+\item{ymax:}{Manually set maximum of y lab}
 }
 \description{
 A function to plot mean curces

@@ -3,8 +3,6 @@
 #' @param sfpca_data: The prepared data from prepare_data() function
 #' @param model The optimal sfpca model
 #' @return A list after post hoc rotation (***)
-#' @export
-
 post_hoc_rotation <- function(sfpca_data, model){
   sa <- model$sa
   Sigma <- rstan::extract(sa, "Sigma", permuted=FALSE)

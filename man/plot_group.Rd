@@ -5,12 +5,12 @@
 \title{A function to generate plots of a group of variables
 Suggestion: take out missing values beforehand}
 \usage{
-plot_group(data, time_name, response_name, unique_subject_id, group_name)
+plot_group(data, time_name, response_name, unique_subject_id, variable_name)
 }
 \arguments{
 \item{unique_subject_id}{the column name corresponding to unique subject id in the data (string)}
 
-\item{group_name}{A vector with column names of interested group variables in data}
+\item{variable_name}{One column name of interested variable from dataset}
 
 \item{data:}{A dataframe with the response column to plot}
 

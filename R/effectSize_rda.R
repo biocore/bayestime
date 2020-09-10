@@ -1,13 +1,13 @@
 #' Function to perform rda analysis on fpc score from model
 #'
-#' @param output: The prepared data from prepare_data() function
+#' @param output: The output list from output_results() function
 #' @param model: A set of variable names insterested in original data
-#' @param basis: The list of basis results from basis_setup_sparse()
+#' @param variables: A list of interested variables for rda analysis
 #' @return A list of results from sfpca model and function
 #' @import vegan
 #' @import ggplot2
 #' @export
-sfpca_rda <- function(output, model, variables){
+effectSize_rda <- function(output, model, variables){
   df <- output$df
   df <- df[complete.cases(df), ]
   dat <- df[, variables]

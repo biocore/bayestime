@@ -8,7 +8,7 @@ Suggestion: take out missing values beforehand}
 plot_fpc_boxplot(output, group_name)
 }
 \arguments{
-\item{group_name}{A vector with column names of interested group variables in data}
+\item{group_name}{One column name of interested group variables in data}
 
 \item{output:}{The model output list from output_results() function}
 }
