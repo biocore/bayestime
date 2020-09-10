@@ -4,19 +4,17 @@
 \alias{output_results}
 \title{generate sfpca models with different parameters}
 \usage{
-output_results(sfpca_data, variables, basis, rotation)
+output_results(da_list, model)
 }
 \arguments{
-\item{data:}{The prepared data from prepare_data() function}
+\item{da_list:}{The prepared data from prepare_data() function}
+
+\item{model:}{The optimal model from optimal() function}
 
 \item{variables:}{A set of variable names insterested in original data}
-
-\item{basis:}{The list of basis results from basis_setup_sparse()}
-
-\item{rotation:}{The list of rotation results from post_hoc_rotation()}
 }
 \value{
-A list of results from sfpca model and function
+A list of results from model
 }
 \description{
 generate sfpca models with different parameters

@@ -1,13 +1,13 @@
 #' A function to draw k diganostic plot
 #'
-#' @param sfpca_data: The prepared data from prepare_data() function (list)
+#' @param data: The prepared data from prepare_data() function (list)
 #' @param model: The optimal sfpca model
 #' @import ggplot2
 #' @import bayesplot
 #' @export
 
-plot_k_diagnostic <- function(sfpca_data, model){
-  N <- sfpca_data$num_subjects
+plot_k_diagnostic <- function(da_list, model){
+  N <- da_list$num_subjects
   loo_best <- model$looic
   pkdf <- data.frame(pk = loo_best$diagnostics$pareto_k, id = 1:N)
   print(ggplot2::ggplot(pkdf, aes(x = id,y = pk)) +
@@ -21,23 +21,25 @@ plot_k_diagnostic <- function(sfpca_data, model){
                 axis.text.y = element_text(size = 10, face = "bold"),
                 axis.title.x = element_text(size = 12, face = "bold"),
                 axis.title.y = element_text(size = 12, face = "bold")))
+  bad <- pkdf[pkdf$pk > 0.7, ]
+  print(paste('Subject ID:', paste(bad$id, collapse = ','), 'have pareto k values greater than 0.7'))
 }
 
 #' A function to draw density overlay plot
 #'
-#' @param sfpca_data: The prepared data from prepare_data() function (list)
+#' @param data: The prepared data from prepare_data() function (list)
 #' @param model: The optimal sfpca model
 #' @import ggplot2
 #' @import rstan
 #' @import bayesplot
 #' @export
 
-plot_density_overlay <- function(sfpca_data, model){
+plot_posterior_diagnostic <- function(da_list, model){
   sa <- model$sa
   Nsamples <- model$Nsamples
   Nchains <- model$Nchains
   Ynew <- rstan::extract(sa, "Ynew", permuted = FALSE)
-  V <- sfpca_data$visits.vector
+  V <- da_list$visits.vector
   Ynew_transform <- matrix(rep(0, Nsamples / 2 * Nchains * sum(V)), ncol = sum(V))
   ind <- 0
   for (i in 1:(Nsamples / 2)) {
@@ -50,6 +52,6 @@ plot_density_overlay <- function(sfpca_data, model){
   bayesplot::color_scheme_set("brightblue")
   k <- model$pc
   d <- model$knot
-  print(bayesplot::ppc_dens_overlay(sfpca_data$data$response, Ynew_transform) +
+  print(bayesplot::ppc_dens_overlay(da_list$data$response, Ynew_transform) +
     ggplot2::ggtitle(paste(k, 'pc_', d, 'knot', sep = '')))
 }

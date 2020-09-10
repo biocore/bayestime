@@ -10,11 +10,10 @@ plot_qqplot <- function(data, response_name){
   }
   par(mfrow=c(2,2))
   response <- data[, response_name]
-  car::qqPlot(response)
-  car::qqPlot(log(response))
-  car::qqPlot(sqrt(response))
-  #qubic root
-  car::qqPlot(response ^ (1/3))
+  car::qqPlot(response, main = 'Response', ylab = 'response')
+  car::qqPlot(log(response), main = 'Log Transform', ylab = 'response')
+  car::qqPlot(sqrt(response), main = 'Square Root', ylab = 'response')
+  car::qqPlot(response ^ (1/3), main = 'Qubic Root', ylab = 'response')
   par(mfrow=c(1,1))
 }
 
