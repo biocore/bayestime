@@ -4,12 +4,12 @@
 \alias{post_hoc_rotation}
 \title{perform post hoc rotation}
 \usage{
-post_hoc_rotation(sfpca_data, model)
+post_hoc_rotation(da_list, model)
 }
 \arguments{
 \item{model}{The optimal sfpca model}
 
-\item{sfpca_data:}{The prepared data from prepare_data() function}
+\item{da_list:}{The prepared data from prepare_data() function}
 }
 \value{
 A list after post hoc rotation (***)

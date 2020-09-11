@@ -68,9 +68,8 @@ summary(dat)
 BayesTime::stan_fit() is the core function to fit longitudinal data. This takes the list of data from prepare_data(), number of samples and chains in stan modelling, and the number of PC and knot. stan_fit() will loop through each pc and knot number and return a list of stan models with respective pc and knot. ***(more explanation)
 * This process may take a lot of time even if the pc and knot number are small. We recommend to save the stan modeling results to save time.
 
-```{r}
-stan_results <- stan_fit(da_list = dat, Nsamples = 1000, Nchain = 3,
-                        PC_range = c(2,3), nknot_range = c(2,3))
+#stan_results <- stan_fit(da_list = dat, Nsamples = 1000, Nchain = 3,
+#                        PC_range = c(2,3), nknot_range = c(2,3))
 #save(stan_results, file='~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
 #load('~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
 ```

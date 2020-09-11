@@ -4,7 +4,7 @@
 \alias{stan_fit}
 \title{generate sfpca models with different parameters}
 \usage{
-stan_fit(da_list, Nsamples, Nchains, PC_max, D_max)
+stan_fit(da_list, Nsamples, Nchains, PC_range, nknot_range)
 }
 \arguments{
 \item{da_list:}{The prepared data list from prepare_data() function}
@@ -13,9 +13,9 @@ stan_fit(da_list, Nsamples, Nchains, PC_max, D_max)
 
 \item{Nchains:}{Number of Markov chain using in rstan model}
 
-\item{PC_max:}{Number of the maximum principal component}
+\item{PC_range:}{A vector of pc number}
 
-\item{D_max:}{Number of the maximum knot}
+\item{nknot_range:}{A vector of knot number}
 }
 \value{
 A list of sfpca classes with difference pc and knot numbers

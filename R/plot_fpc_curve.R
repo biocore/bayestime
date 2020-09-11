@@ -1,10 +1,10 @@
 #' A function to plot fpc curves
 #'
 #' @param output The model output list from output_results() function
-#' @param original The option to plot with original or transformed
-#' time and response value
+#' @param ymin The minimum of y lab
+#' @param ymax The maximum of y lab
 #' @export
-plot_fpc_curve <- function(output, original = FALSE, ymin = NULL, ymax = NULL){
+plot_fpc_curve <- function(output, ymin = NULL, ymax = NULL){
   time_cont <- output$basis$time_cont
   FPC_mean <- output$FPC_mean
   K <- output$rotation$npcs

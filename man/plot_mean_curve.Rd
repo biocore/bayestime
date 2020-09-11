@@ -4,7 +4,7 @@
 \alias{plot_mean_curve}
 \title{A function to plot mean curces}
 \usage{
-plot_mean_curve(output, ymin = NULL, ymax = NULL)
+plot_mean_curve(output, original = FALSE, ymin = NULL, ymax = NULL)
 }
 \arguments{
 \item{output:}{The model output from output_results() function}

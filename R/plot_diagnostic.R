@@ -7,10 +7,11 @@
 #' @export
 
 plot_k_diagnostic <- function(da_list, model){
-  N <- da_list$num_subjects
   loo_best <- model$looic
-  pkdf <- data.frame(pk = loo_best$diagnostics$pareto_k, id = unique(da_list$data$ID))
-  print(ggplot2::ggplot(pkdf, aes(x = id,y = pk)) +
+  pkdf <- data.frame(pk = loo_best$diagnostics$pareto_k,
+                     id = unique(da_list$data$ID),
+                     xaxis = 1:length(unique(da_list$data$ID)))
+  print(ggplot2::ggplot(pkdf, aes(x = xaxis,y = pk)) +
           geom_point(shape = 3, color = "blue") +
           labs(x = "Observation left out", y = "Pareto shape k") +
           geom_hline(yintercept = 0.7, linetype = 2, color = "red", size = 0.2) +
@@ -22,7 +23,11 @@ plot_k_diagnostic <- function(da_list, model){
                 axis.title.x = element_text(size = 12, face = "bold"),
                 axis.title.y = element_text(size = 12, face = "bold")))
   bad <- pkdf[pkdf$pk > 0.7, ]
-  print(paste('Subject ID:', paste(bad$id, collapse = ','), 'have pareto k values greater than 0.7'))
+  if (nrow(bad) != 0){
+    print(paste('Warning: observation', bad$id,
+                'have Pareto k-values greater than 0.7 at', round(bad$pk, 4)))
+  }
+
 }
 
 #' A function to draw density overlay plot
