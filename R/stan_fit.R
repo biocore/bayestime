@@ -23,6 +23,7 @@ sfpcaClass <- function(Nsamples = NULL, Nchains = NULL, pc=NULL, knot=NULL,
 #' @param da_list: The prepared data list from prepare_data() function
 #' @param Nsamples: Number of objects sampling from rstan
 #' @param Nchains: Number of Markov chain using in rstan model
+#' @param Ncores: Number of cores using in rstan model
 #' @param PC_range: A vector of pc number
 #' @param nknot_range: A vector of knot number
 #' @return A list of sfpca classes with difference pc and knot numbers
@@ -33,7 +34,7 @@ sfpcaClass <- function(Nsamples = NULL, Nchains = NULL, pc=NULL, knot=NULL,
 #' @useDynLib BayesTime, .registration = TRUE
 #' @export
 
-stan_fit <- function(da_list, Nsamples, Nchains, PC_range, nknot_range){
+stan_fit <- function(da_list, Nsamples, Nchains, Ncores=NULL, PC_range, nknot_range){
   stan_results <- list()
   i <- 0
   for (k in PC_range) {
@@ -57,9 +58,11 @@ stan_fit <- function(da_list, Nsamples, Nchains, PC_range, nknot_range){
                        cov_size = da_list$cov.size,
                        B = results_basis$orth_spline_basis_sparse_stacked)
 
+      if (is.null(Ncores)) Ncores = getOption("mc.cores", 1L)
+
       set.seed(31)
       sa <- rstan::sampling(stanmodels$sfpca, data = pca_data, iter = Nsamples,
-                            chains = Nchains, init = "random")
+                            chains = Nchains, cores = Ncores, init = "random")
       sfpca$sa <- sa
       sfpca$log_lik <- rstan::extract(sa,"log_lik_marg")[[1]]
       sfpca$looic <- loo::loo(sfpca$log_lik)
