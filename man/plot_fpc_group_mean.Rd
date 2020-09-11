@@ -4,9 +4,20 @@
 \alias{plot_fpc_group_mean}
 \title{plot group mean of fpc scores}
 \usage{
-plot_fpc_group_mean(output, group_name)
+plot_fpc_group_mean(
+  output,
+  pc_idx,
+  original = FALSE,
+  group_name,
+  ymin = NULL,
+  ymax = NULL
+)
 }
 \arguments{
+\item{pc_idx}{The pc index to plot with}
+
+\item{original}{The option to plot with original or transformed}
+
 \item{group_name}{One column name of interested group variables in data}
 
 \item{output:}{The model output list from output_results() function}

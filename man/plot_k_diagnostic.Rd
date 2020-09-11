@@ -8,6 +8,7 @@ plot_k_diagnostic(da_list, model)
 }
 \arguments{
 \item{data:}{The prepared data from prepare_data() function (list)}
+
 \item{model:}{The optimal sfpca model}
 }
 \description{
