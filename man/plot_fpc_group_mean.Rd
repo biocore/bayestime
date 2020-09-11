@@ -20,6 +20,10 @@ plot_fpc_group_mean(
 
 \item{group_name}{One column name of interested group variables in data}
 
+\item{ymin}{The minimum of y lab}
+
+\item{ymax}{The maximum of y lab}
+
 \item{output:}{The model output list from output_results() function}
 }
 \description{

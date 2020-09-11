@@ -5,8 +5,11 @@
 #' @param pc_idx The pc index to plot with
 #' @param original The option to plot with original or transformed
 #' time and response value
+#' @param ymin The minimum of y lab
+#' @param ymax The maximum of y lab
 #' @export
-plot_fpc_on_mean_curve <- function(output, pc_idx, original = FALSE){
+plot_fpc_on_mean_curve <- function(output, pc_idx, original = FALSE,
+                                   ymin=NULL, ymax=NULL){
   time_cont <- output$basis$time_cont
   Mu_functions <- output$Mu_functions
   FPC_mean <- output$FPC_mean
@@ -25,7 +28,8 @@ plot_fpc_on_mean_curve <- function(output, pc_idx, original = FALSE){
       response <- data$response
       time <- data$time
     } else {
-      print('Time and response did not transformed. Print results with original values')
+      print('Time and response did not transformed.
+            Print results with original values')
     }
   }
 
@@ -35,9 +39,10 @@ plot_fpc_on_mean_curve <- function(output, pc_idx, original = FALSE){
   prop_var_avg <- output$rotation$prop_var_avg
   k <- pc_idx
 
-  if (is.null(ymin) & is.null(ymax)) {
+  if (is.null(ymin)) {
     ymin <- floor(min((Mu_functions + FPC_mean[, k]) * sigma_y + mu_y,
-                    (Mu_functions - FPC_mean[, k]) * sigma_y + mu_y)) - 0.5
+                    (Mu_functions - FPC_mean[, k]) * sigma_y + mu_y)) - 0.5 }
+  if (is.null(ymax)) {
     ymax <- ceiling(max((Mu_functions + FPC_mean[, k]) * sigma_y + mu_y,
                       (Mu_functions - FPC_mean[, k]) * sigma_y + mu_y)) + 0.5
   }
@@ -49,5 +54,6 @@ plot_fpc_on_mean_curve <- function(output, pc_idx, original = FALSE){
         type="l",lwd = 3,lty = 2,col = 3) # green
   title(main=paste(paste('PC', k, sep=' '), ' (', prop_var_avg[k], ' )', sep=''))
   #axis(1, font=2) # make x-axis ticks label bold
-  legend('topright', c('+ pc', '- pc'), lty=c(2,2), lwd=c(3,3), col=c(2, 3), bty='n', cex=0.5)
+  legend('topright', c('+ pc', '- pc'),
+         lty=c(2,2), lwd=c(3,3), col=c(2, 3), bty='n', cex=0.5)
 }

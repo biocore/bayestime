@@ -4,10 +4,10 @@
 \alias{plot_posterior_diagnostic}
 \title{A function to draw density overlay plot}
 \usage{
-plot_posterior_diagnostic(da_list, model)
+plot_posterior_diagnostic(sfpca_data, model)
 }
 \arguments{
-\item{data:}{The prepared data from prepare_data() function (list)}
+\item{sfpca_data:}{The prepared data from prepare_data() function (list)}
 
 \item{model:}{The optimal sfpca model}
 }

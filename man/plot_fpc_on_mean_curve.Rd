@@ -4,7 +4,13 @@
 \alias{plot_fpc_on_mean_curve}
 \title{A function to plot fpc on mean curves}
 \usage{
-plot_fpc_on_mean_curve(output, pc_idx, original = FALSE)
+plot_fpc_on_mean_curve(
+  output,
+  pc_idx,
+  original = FALSE,
+  ymin = NULL,
+  ymax = NULL
+)
 }
 \arguments{
 \item{output}{The model output list from output_results() function}
@@ -13,6 +19,10 @@ plot_fpc_on_mean_curve(output, pc_idx, original = FALSE)
 
 \item{original}{The option to plot with original or transformed
 time and response value}
+
+\item{ymin}{The minimum of y lab}
+
+\item{ymax}{The maximum of y lab}
 }
 \description{
 A function to plot fpc on mean curves

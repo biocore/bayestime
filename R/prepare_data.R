@@ -112,10 +112,10 @@ prepare_data = function(data, unique_subject_id, time_name, response_name,
   cov.start <- c(1, cov.stop[-N] + 1)
   cov.size <- sum(visits.vector ^ 2)
 
-  da_list = list(data=data, num_subjects=N, num_times=T_len,
+  sfpca_data = list(data=data, num_subjects=N, num_times=T_len,
                     response.list=response.list, time.matrix=time.matrix,
                     visits.vector=visits.vector, visits.start=visits.start,
                     visits.stop=visits.stop, cov.start=cov.start, cov.stop=cov.stop,
                     cov.size=cov.size, id_group=id_group)
-  return(da_list)
+  return(sfpca_data)
 }

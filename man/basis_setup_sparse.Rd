@@ -4,10 +4,10 @@
 \alias{basis_setup_sparse}
 \title{set up spline basis for sparse data}
 \usage{
-basis_setup_sparse(da_list, nknots, orth = TRUE, delta = 1/10000)
+basis_setup_sparse(sfpca_data, nknots, orth = TRUE, delta = 1/10000)
 }
 \arguments{
-\item{da_list}{longitudinal data generated from prepare_data() function (list)}
+\item{sfpca_data}{longitudinal data generated from prepare_data() function (list)}
 
 \item{nknots:}{user-defined number of knots}
 

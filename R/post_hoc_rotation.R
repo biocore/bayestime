@@ -1,11 +1,11 @@
 #' perform post hoc rotation
 #'
-#' @param da_list: The prepared data from prepare_data() function
+#' @param sfpca_data: The prepared data from prepare_data() function
 #' @param model The optimal sfpca model
 #' @return A list after post hoc rotation (***)
 #' @import rstan
 #' @export
-post_hoc_rotation <- function(da_list, model){
+post_hoc_rotation <- function(sfpca_data, model){
   sa <- model$sa
   Sigma <- rstan::extract(sa, "Sigma", permuted=FALSE)
   W <- rstan::extract(sa, "W", permuted=FALSE)
@@ -15,7 +15,7 @@ post_hoc_rotation <- function(da_list, model){
   Theta <- rstan::extract(sa, "Theta", permuted=FALSE)
 
   ## Reshape parameters and reorient loadings with PCA rotation
-  N <- da_list$num_subjects
+  N <- sfpca_data$num_subjects
   K <- model$pc
   Q <- model$knot + 4
   Nchains <- model$Nchains
