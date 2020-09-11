@@ -20,5 +20,5 @@ optimal <- function(model_list){
 
   optimal.name <- rownames(looic.obj)[1]
   optimal.index <- as.numeric(gsub(".*?([0-9]+).*", "\\1", optimal.name))
-  return(model_list[[optimal.index]])
+  return(optimal.index)
 }

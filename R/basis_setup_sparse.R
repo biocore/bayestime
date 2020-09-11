@@ -6,6 +6,7 @@
 #' @param delta: set to be 1/10000 to avoid rounding error(need eddit)
 #' @return A list containing the spline basis of sparse data
 #' @import splines
+#' @export
 
 basis_setup_sparse = function(da_list, nknots, orth=TRUE, delta = 1/10000){
   #set up variables

@@ -23,8 +23,8 @@ sfpcaClass <- function(Nsamples = NULL, Nchains = NULL, pc=NULL, knot=NULL,
 #' @param da_list: The prepared data list from prepare_data() function
 #' @param Nsamples: Number of objects sampling from rstan
 #' @param Nchains: Number of Markov chain using in rstan model
-#' @param PC_max: Number of the maximum principal component
-#' @param D_max: Number of the maximum knot
+#' @param PC_range: A vector of pc number
+#' @param nknot_range: A vector of knot number
 #' @return A list of sfpca classes with difference pc and knot numbers
 #' @import loo
 #' @import Rcpp
@@ -33,11 +33,11 @@ sfpcaClass <- function(Nsamples = NULL, Nchains = NULL, pc=NULL, knot=NULL,
 #' @useDynLib BayesTime, .registration = TRUE
 #' @export
 
-stan_fit <- function(da_list, Nsamples, Nchains, PC_max, D_max){
-  sfpca_results <- list()
+stan_fit <- function(da_list, Nsamples, Nchains, PC_range, nknot_range){
+  stan_results <- list()
   i <- 0
-  for (k in 1:PC_max) {
-    for (d in 1:D_max) {
+  for (k in PC_range) {
+    for (d in nknot_range) {
       i <- i + 1
       sfpca <- sfpcaClass()
       sfpca$pc <- k
@@ -65,9 +65,9 @@ stan_fit <- function(da_list, Nsamples, Nchains, PC_max, D_max){
       sfpca$looic <- loo::loo(sfpca$log_lik)
       sfpca$Nsamples <- Nsamples
       sfpca$Nchains <- Nchains
-      sfpca_results[[i]] <- sfpca
+      stan_results[[i]] <- sfpca
       print("######### SFPCA ###############")
     }
   }
-  return(sfpca_results)
+  return(stan_results)
 }

@@ -5,20 +5,29 @@
 #' @param ymax: Manually set maximum of y lab
 #' @export
 
-plot_mean_curve <- function(output, ymin=NULL, ymax=NULL){
+plot_mean_curve <- function(output, original = FALSE, ymin=NULL, ymax=NULL){
   data <- output$df
   N <- length(unique(data$ID))
 
-  if ('time_ori' %in% colnames(data) & 'response_ori' %in% colnames(data)){
-    response <- data$response_ori
-    time <- data$time_ori
+  if (original == TRUE){
+    if ('time_ori' %in% colnames(data) & 'response_ori' %in% colnames(data)){
+      response <- data$response_ori
+      time <- data$time_ori
+    } else {
+      response <- data$response
+      time <- data$time
+    }
   } else {
-    response <- data$response
-    time <- data$time
+    if ('time_ori' %in% colnames(data) & 'response_ori' %in% colnames(data)){
+      response <- data$response
+      time <- data$time
+    } else {
+      print('Time and response did not transformed. Print results with original values')
+    }
   }
 
-  sigma_y <- sd(log(response))
-  mu_y <- mean(log(response))
+  sigma_y <- sd(response)
+  mu_y <- mean(response)
   time_cont <- output$basis$time_cont
   Y_sparse <- output$Y_sparse
   Mu_functions <- output$Mu_functions

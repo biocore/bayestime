@@ -69,17 +69,18 @@ BayesTime::stan_fit() is the core function to fit longitudinal data. This takes 
 * This process may take a lot of time even if the pc and knot number are small. We recommend to save the stan modeling results to save time.
 
 ```{r}
-#stan_results <- stan_fit(da_list = dat, Nsamples = 1000, Nchain = 3,
-#                        PC_max = 3, D_max = 3)
+stan_results <- stan_fit(da_list = dat, Nsamples = 1000, Nchain = 3,
+                        PC_range = c(2,3), nknot_range = c(2,3))
 #save(stan_results, file='~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
-load('~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
+#load('~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
 ```
 
 ## optimal(): Get the optimal model
 BayesTime::optimal() takes a list of fitted stan models and use loo_compare() from loo package. This prints out the compare results and return the optimal stan model.
 ```{r}
-optimal_model <- optimal(model_list = stan_results)
-summary(optimal_model)
+optimal_model_idx <- optimal(model_list = stan_results)
+optimal_model <- stan_results[[optimal_model_idx]]
+optimal_model <- stan_results[[4]]
 ```
 
 ## plot_k_diagnostic(): Plot diagnostic figure
@@ -122,17 +123,17 @@ BayesTime::plot_residual() takes the output from output_results() and generates 
 
 ## plot_mean_curve(): ***
 ```{r, fig.height = 4, fig.width=6}
-plot_mean_curve(output = model_output, ymin=NULL, ymax=NULL)
+plot_mean_curve(output = model_output, original = T, ymin=NULL, ymax=NULL)
 ```
 
 ## plot_fpc_curve(): 
 ```{r}
-plot_fpc_curve(output = model_output)
+plot_fpc_curve(output = model_output, original = F)
 ```
 
 ## plot_fpc_group_mean():
 ```{r}
-plot_fpc_group_mean(model_output, 'delivery')
+plot_fpc_group_mean(model_output, pc_idx = 1, original = F, 'delivery')
 ```
 
 ## plot_fpc_boxplot(): Generate boxplot for fpc score by group
