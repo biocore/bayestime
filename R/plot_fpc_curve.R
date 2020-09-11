@@ -1,38 +1,26 @@
 #' A function to plot fpc curves
 #'
 #' @param output The model output list from output_results() function
+#' @param original The option to plot with original or transformed
+#' time and response value
 #' @export
-plot_fpc_curve <- function(output){
+plot_fpc_curve <- function(output, original = FALSE, ymin = NULL, ymax = NULL){
   time_cont <- output$basis$time_cont
-  Mu_functions <- output$Mu_functions
   FPC_mean <- output$FPC_mean
-  data <- output$df
-
-  if ('time_ori' %in% colnames(data) & 'response_ori' %in% colnames(data)){
-    response <- data$response_ori
-    time <- data$time_ori
-  } else {
-    response <- data$response
-    time <- data$time
-  }
-
-  sigma_y <- sd(log(response))
-  mu_y <- mean(log(response))
   K <- output$rotation$npcs
-  prop_var_avg <- output$rotation$prop_var_avg
-  for (k in 1:K) {
-    mi <- floor(min((Mu_functions + FPC_mean[, k]) * sigma_y + mu_y,
-                    (Mu_functions - FPC_mean[, k]) * sigma_y + mu_y)) - 0.5
-    ma <- ceiling(max((Mu_functions + FPC_mean[, k]) * sigma_y + mu_y,
-                      (Mu_functions - FPC_mean[, k]) * sigma_y + mu_y)) + 0.5
-    plot(time_cont, Mu_functions * sigma_y + mu_y, type="l", ylim=c(mi, ma),
-         lwd=2,col=1, xlab='time', ylab='response', font.lab=2, cex.lab=1.2)
-    lines(time_cont, (Mu_functions + FPC_mean[, k]) * sigma_y + mu_y,
-          type="l",lwd = 3,lty = 2,col = 2) # red
-    lines(time_cont, (Mu_functions - FPC_mean[, k]) * sigma_y + mu_y,
-          type="l",lwd = 3,lty = 2,col = 3) # green
-    title(main=paste(paste('PC', k, sep=' '), ' (', prop_var_avg[k], ' )', sep=''))
-    #axis(1, font=2) # make x-axis ticks label bold
-    legend('topright', c('+ pc', '- pc'), lty=c(2,2), lwd=c(3,3), col=c(2, 3), bty='n', cex=0.5)
+  pc_names <- unlist(lapply(1:K, function(x) paste('PC', x, sep = '')))
+
+  if (is.null(ymin) & is.null(ymax)) {
+    ymin <- floor(min((FPC_mean))) - 0.5
+    ymax <- ceiling(max((FPC_mean))) + 0.5
   }
+
+  plot(time_cont, FPC_mean[, 1], type="n", ylim = c(ymin, ymax),
+       xlab = 'time', ylab='FPC Scores', font.lab = 2, cex.lab = 1.2)
+  for (k in 1:K) {
+    lines(time_cont, FPC_mean[, k], type = "l",lwd = 3,lty = 1, col = k + 1)
+  }
+  title(main = 'FPC Curves')
+  legend('topright', pc_names, lty = rep(1, K), lwd = rep(3, K),
+         col = seq(2, K + 1, 1), bty='n', cex = 0.5)
 }

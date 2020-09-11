@@ -9,7 +9,7 @@
 plot_k_diagnostic <- function(da_list, model){
   N <- da_list$num_subjects
   loo_best <- model$looic
-  pkdf <- data.frame(pk = loo_best$diagnostics$pareto_k, id = 1:N)
+  pkdf <- data.frame(pk = loo_best$diagnostics$pareto_k, id = unique(da_list$data$ID))
   print(ggplot2::ggplot(pkdf, aes(x = id,y = pk)) +
           geom_point(shape = 3, color = "blue") +
           labs(x = "Observation left out", y = "Pareto shape k") +
