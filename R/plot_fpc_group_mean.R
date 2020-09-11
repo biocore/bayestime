@@ -4,6 +4,8 @@
 #' @param pc_idx The pc index to plot with
 #' @param group_name One column name of interested group variables in data
 #' @param original The option to plot with original or transformed
+#' @param ymin The minimum of y lab
+#' @param ymax The maximum of y lab
 #' @export
 plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
                                 ymin = NULL, ymax = NULL){
@@ -36,12 +38,12 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
   FPC_mean <- output$FPC_mean
   prop_var_avg <- output$rotation$prop_var_avg
 
-  if (is.null(ymin) & is.null(ymax)) {
+  if (is.null(ymin)) {
     ymin <- floor(min(unlist(Y_sparse) * sigma_y + mu_y,
-                      Mu_functions * sigma_y + mu_y)) - 0.1
+                      Mu_functions * sigma_y + mu_y)) - 0.1 }
+  if (is.null(ymax)) {
     ymax <- ceiling(max(unlist(Y_sparse) * sigma_y + mu_y,
-                        Mu_functions * sigma_y + mu_y)) + 0.1
-  }
+                        Mu_functions * sigma_y + mu_y)) + 0.1 }
 
   k = pc_idx
   fpcs <- paste('fpc', k, sep = '')
@@ -50,15 +52,17 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
   groups <- length(classes)
   scores_mu_g <- numeric(groups)
 
-  plot(time_cont * max(time), Mu_functions * sigma_y + mu_y, type="n",
-       lwd = 2, xlab='Time', ylab='FPC Scores', font.lab = 2, cex.lab = 1.2,
+  plot(time_cont * max(time), Mu_functions * sigma_y + mu_y,
+       type="n", lwd = 2,
+       xlab='Time', ylab='FPC Scores',
+       font.lab = 2, cex.lab = 1.2,
        ylim = c(ymin, ymax))
 
   for (j in 1:groups){
     scores_mu_g_temp = mean(data_temp[data_temp[, group_name] == classes[j], fpcs])
     lines(time_cont * max(time),
           (Mu_functions + FPC_mean[, k] * scores_mu_g_temp) * sigma_y + mu_y,
-          type = "l", lwd = 3, lty = 1, col = j+1)
+          type = "l", lwd = 3, lty = 1, col = j + 1)
   }
 
   title(main = paste(paste('PC', k, sep = ' '), ' (', prop_var_avg[k], ' )', sep=''))

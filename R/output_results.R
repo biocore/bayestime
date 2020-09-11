@@ -1,14 +1,13 @@
 #' generate sfpca models with different parameters
 #'
-#' @param da_list: The prepared data from prepare_data() function
+#' @param sfpca_data: The prepared data from prepare_data() function
 #' @param model: The optimal model from optimal() function
-#' @param variables: A set of variable names insterested in original data
 #' @return A list of results from model
 #' @importFrom Matrix bdiag
 #' @export
-output_results <- function(da_list, model){
-  basis <- basis_setup_sparse(da_list, nknots = model$knot, orth=TRUE)
-  rotation <- post_hoc_rotation(da_list, model = model)
+output_results <- function(sfpca_data, model){
+  basis <- basis_setup_sparse(sfpca_data, nknots = model$knot, orth=TRUE)
+  rotation <- post_hoc_rotation(sfpca_data, model = model)
 
   npcs <- rotation$npcs
   ALPHA_array <- rotation$alpha_new
@@ -17,7 +16,7 @@ output_results <- function(da_list, model){
   phi_t_cont <- basis$orth_spline_basis_cont
   phi_t <- basis$orth_spline_basis_sparse
   time_cont <- basis$time_cont
-  N <- da_list$num_subjects
+  N <- sfpca_data$num_subjects
 
   nloop <- dim(ALPHA_array)[3]
   first <- 1
@@ -41,13 +40,13 @@ output_results <- function(da_list, model){
   Mu_functions <- t(as.matrix(Mu_functions_temp)) %*% MU_mean
   FPC_mean <- t(phi_t_cont) %*% THETA_mean
 
-  if (('time_ori' %in% colnames(da_list$data)) & ('response_ori' %in% colnames(da_list$data))){
+  if (('time_ori' %in% colnames(sfpca_data$data)) & ('response_ori' %in% colnames(sfpca_data$data))){
     var_require <- c('ID', 'time', 'time_ori', 'response', 'response_ori')
   } else {
     var_require <- c('ID', 'time', 'response')
   }
-  vars_complete <- c(var_require, colnames(da_list$data)[!colnames(da_list$data) %in% var_require])
-  df <- da_list$data[, vars_complete]
+  vars_complete <- c(var_require, colnames(sfpca_data$data)[!colnames(sfpca_data$data) %in% var_require])
+  df <- sfpca_data$data[, vars_complete]
   # tryCatch({
   #   df <- da_list$data[, vars_complete]
   # }, error = function(e){

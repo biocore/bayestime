@@ -4,13 +4,16 @@
 \alias{plot_fpc_curve}
 \title{A function to plot fpc curves}
 \usage{
-plot_fpc_curve(output, original = FALSE, ymin = NULL, ymax = NULL)
+plot_fpc_curve(output, pc_idx, ymin = NULL, ymax = NULL)
 }
 \arguments{
 \item{output}{The model output list from output_results() function}
 
-\item{original}{The option to plot with original or transformed
-time and response value}
+\item{pc_idx}{The indices of pc to plot}
+
+\item{ymin}{The minimum of y lab}
+
+\item{ymax}{The maximum of y lab}
 }
 \description{
 A function to plot fpc curves

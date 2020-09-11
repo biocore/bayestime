@@ -1,6 +1,6 @@
 #' set up spline basis for sparse data
 #'
-#' @param da_list longitudinal data generated from prepare_data() function (list)
+#' @param sfpca_data longitudinal data generated from prepare_data() function (list)
 #' @param nknots: user-defined number of knots
 #' @param orth: default setting for orth should be TRUE (after discussed with Wes on 02/13/2019)
 #' @param delta: set to be 1/10000 to avoid rounding error(need eddit)
@@ -8,13 +8,13 @@
 #' @import splines
 #' @export
 
-basis_setup_sparse = function(da_list, nknots, orth=TRUE, delta = 1/10000){
+basis_setup_sparse = function(sfpca_data, nknots, orth=TRUE, delta = 1/10000){
   #set up variables
-  time_var <- da_list$data$time
-  num_subjects <-da_list$num_subjects
-  num_times <- da_list$num_times
-  S <- da_list$time.matrix
-  V <- da_list$visits.vector
+  time_var <- sfpca_data$data$time
+  num_subjects <-sfpca_data$num_subjects
+  num_times <- sfpca_data$num_times
+  S <- sfpca_data$time.matrix
+  V <- sfpca_data$visits.vector
   # continuous time interval
   time_unique <- sort(unique(time_var))
   time_min <- min(time_unique)

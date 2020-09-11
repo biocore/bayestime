@@ -4,10 +4,19 @@
 \alias{plot_mean_curve}
 \title{A function to plot mean curces}
 \usage{
-plot_mean_curve(output, original = FALSE, ymin = NULL, ymax = NULL)
+plot_mean_curve(
+  output,
+  original = FALSE,
+  xlab = NULL,
+  ylab = NULL,
+  ymin = NULL,
+  ymax = NULL
+)
 }
 \arguments{
 \item{output:}{The model output from output_results() function}
+
+\item{original:}{The option to plot with original or transformed}
 
 \item{ymin:}{Manually set minimum of y lab}
 

@@ -4,14 +4,12 @@
 \alias{output_results}
 \title{generate sfpca models with different parameters}
 \usage{
-output_results(da_list, model)
+output_results(sfpca_data, model)
 }
 \arguments{
-\item{da_list:}{The prepared data from prepare_data() function}
+\item{sfpca_data:}{The prepared data from prepare_data() function}
 
 \item{model:}{The optimal model from optimal() function}
-
-\item{variables:}{A set of variable names insterested in original data}
 }
 \value{
 A list of results from model
