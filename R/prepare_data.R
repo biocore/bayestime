@@ -46,6 +46,7 @@ prepare_data = function(data, unique_subject_id, time_name, response_name,
     data$time_ori <- data[, time_name]
     data$time <- (data[, time_name] - min(data[, time_name])) / (max(data[, time_name]) - min(data[, time_name]))
   } else{
+    data$time_ori <- data[, time_name]
     data$time <- data[, time_name]
   }
 
@@ -61,6 +62,7 @@ prepare_data = function(data, unique_subject_id, time_name, response_name,
     data$response_ori <- data[, response_name]
     data$response <- (data[, response_name] - mean(data[, response_name], na.rm=T))
   } else {
+    data$response_ori <- data[, response_name]
     data$response <- data[, response_name]
   }
 

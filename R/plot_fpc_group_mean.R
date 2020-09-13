@@ -4,28 +4,27 @@
 #' @param pc_idx The pc index to plot with
 #' @param group_name One column name of interested group variables in data
 #' @param original The option to plot with original or transformed
+#' @param xlab: Manually set x axis title
+#' @param ylab: Manually set y axis title
 #' @param ymin The minimum of y lab
 #' @param ymax The maximum of y lab
 #' @export
 plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
+                                xlab = NULL, ylab = NULL,
                                 ymin = NULL, ymax = NULL){
   data <- output$df
   K <- output$rotation$npcs
 
   if (original == TRUE){
-    if ('time_ori' %in% colnames(data) & 'response_ori' %in% colnames(data)){
-      response <- data$response_ori
-      time <- data$time_ori
-    } else {
-      response <- data$response
-      time <- data$time
-    }
+    response <- data$response_ori
+    time <- data$time_ori
   } else {
-    if ('time_ori' %in% colnames(data) & 'response_ori' %in% colnames(data)){
-      response <- data$response
-      time <- data$time
-    } else {
-      print('Time and response did not transformed. Print results with original values')
+    response <- data$response
+    time <- data$time
+    if (all(data$response == data$response_ori) &
+        all(data$time == data$time_ori)){
+      print('Warning: Response and time are not transformed.
+            Plot with original values')
     }
   }
 
@@ -44,6 +43,8 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
   if (is.null(ymax)) {
     ymax <- ceiling(max(unlist(Y_sparse) * sigma_y + mu_y,
                         Mu_functions * sigma_y + mu_y)) + 0.1 }
+  if (is.null(xlab)) xlab = 'time'
+  if (is.null(ylab)) ylab = 'response'
 
   k = pc_idx
   fpcs <- paste('fpc', k, sep = '')
@@ -64,7 +65,6 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
           (Mu_functions + FPC_mean[, k] * scores_mu_g_temp) * sigma_y + mu_y,
           type = "l", lwd = 3, lty = 1, col = j + 1)
   }
-
   title(main = paste(paste('PC', k, sep = ' '), ' (', prop_var_avg[k], ' )', sep=''))
   legend('bottomright', classes, lty = rep(1, groups), lwd = rep(3, groups),
          col = seq(2, groups + 1), bty = 'n', cex = 0.5)

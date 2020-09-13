@@ -2,6 +2,8 @@
 #'
 #' @param output: The model output from output_results() function
 #' @param original: The option to plot with original or transformed
+#' @param xlab: Manually set x axis title
+#' @param ylab: Manually set y axis title
 #' @param ymin: Manually set minimum of y lab
 #' @param ymax: Manually set maximum of y lab
 #' @export
@@ -13,22 +15,17 @@ plot_mean_curve <- function(output, original = FALSE,
   N <- length(unique(data$ID))
 
   if (original == TRUE){
-    if ('time_ori' %in% colnames(data) & 'response_ori' %in% colnames(data)){
-      response <- data$response_ori
-      time <- data$time_ori
-    } else {
-      response <- data$response
-      time <- data$time
-    }
+    response <- data$response_ori
+    time <- data$time_ori
   } else {
-    if ('time_ori' %in% colnames(data) & 'response_ori' %in% colnames(data)){
-      response <- data$response
-      time <- data$time
-    } else {
-      print('Time and response did not transformed. Print results with original values')
+    response <- data$response
+    time <- data$time
+    if (all(data$response == data$response_ori) &
+        all(data$time == data$time_ori)){
+      print('Warning: Response and time are not transformed.
+            Plot with original values')
     }
   }
-
   sigma_y <- sd(response)
   mu_y <- mean(response)
   time_cont <- output$basis$time_cont
@@ -42,6 +39,8 @@ plot_mean_curve <- function(output, original = FALSE,
   if (is.null(ymax)) {
     ymax <- ceiling(max(unlist(Y_sparse) * sigma_y + mu_y,
                         Mu_functions * sigma_y + mu_y)) + 0.1 }
+  if (is.null(xlab)) xlab = 'time'
+  if (is.null(ylab)) ylab = 'response'
 
   if (is.null(xlab)) xlab = 'time'
   if (is.null(ylab)) ylab = 'response'

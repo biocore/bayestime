@@ -12,7 +12,8 @@ sfpcaClass(
   knot = NULL,
   sa = NULL,
   log_lik = NULL,
-  looic = NULL
+  looic = NULL,
+  basis = NULL
 )
 }
 \description{

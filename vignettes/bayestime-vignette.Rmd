@@ -69,8 +69,8 @@ BayesTime::stan_fit() is the core function to fit longitudinal data. This takes 
 * This process may take a lot of time even if the pc and knot number are small. We recommend to save the stan modeling results to save time.
 
 ```{r}
-stan_results <- stan_fit(sfpca_data = dat, Nsamples = 1000, Nchain = 3,
-                        Ncores=2, PC_range = c(2,3), nknot_range = c(2,3))
+#stan_results <- stan_fit(sfpca_data = dat, Nsamples = 1000, Nchain = 3,
+#                        Ncores=2, PC_range = c(2,3), nknot_range = c(2,3))
 #save(stan_results, file='~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
 load('~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
 ```
@@ -80,7 +80,7 @@ BayesTime::optimal() takes a list of fitted stan models and use loo_compare() fr
 ```{r}
 optimal_model_idx <- optimal(model_list = stan_results)
 optimal_model <- stan_results[[optimal_model_idx]]
-optimal_model <- stan_results[[4]]
+#optimal_model <- stan_results[[4]]
 ```
 
 ## plot_k_diagnostic(): Plot diagnostic figure
@@ -124,27 +124,30 @@ BayesTime::plot_residual() takes the output from output_results() and generates 
 ## plot_mean_curve(): ***
 ```{r, fig.height = 4, fig.width=6}
 plot_mean_curve(output = model_output, original = T, xlab = 'age', ylab = 'shannon', ymin=0, ymax=7.6)
+plot_mean_curve(output = model_output, original = F, xlab = 'age', ylab = 'shannon')
 ```
 
 ## plot_fpc_curve(): 
-```{r}
-plot_fpc_curve(output = model_output, pc_idx = c(1,2,3), ymin = -3, ymax = 5)
+```{r, fig.height = 4, fig.width=6}
+plot_fpc_curve(output = model_output, pc_idx = c(1,2,3), original = T)
 ```
 
 ## plot_fpc_on_mean_curve(): 
-```{r}
+```{r, fig.height = 4, fig.width=6}
 plot_fpc_on_mean_curve(output = model_output, pc_idx = 1, original = T)
+plot_fpc_on_mean_curve(output = model_output, pc_idx = 2, original = F)
 ```
 
 ## plot_fpc_group_mean():
-```{r}
-plot_fpc_group_mean(model_output, pc_idx = 1, original = F, 'delivery')
+```{r, fig.height = 4, fig.width=6}
+plot_fpc_group_mean(model_output, pc_idx = 1, original = T, 'delivery')
 ```
 
 ## plot_fpc_boxplot(): Generate boxplot for fpc score by group
 BayesTime::plot_fpc_boxplot() generates the boxplot of fpc scores from sfpca model and compare them by group. This function takes the output list from output_results() and the vector of variables that are invariant with time.
-```{r}
-plot_fpc_boxplot(output = model_output, pc_idx = 2, group_name = 'diet_3')
+```{r, fig.height = 4, fig.width=6}
+plot_fpc_boxplot(output = model_output, pc_idx = 1, group_name = 'diet_3',
+                 testing_type = 'parametric', pairwise_testing = T)
 ```
 
 
@@ -159,5 +162,5 @@ invars
 BayesTime::effectSize_rda() automates the rda analysis using rda() from vegan package. This takes the output list from output_results(), stan model from optimal(), and a set of variables self-input or from invariants(). It returns the table and ggplot of the rda analysis results.
 ```{r, results=FALSE, fig.height = 4, fig.width=4}
 model_rda <- effectSize_rda(model_output, optimal_model, invars)
-model_rda
+print(model_rda)
 ```

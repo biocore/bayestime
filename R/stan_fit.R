@@ -46,7 +46,7 @@ stan_fit <- function(sfpca_data, Nsamples, Nchains, Ncores=NULL,
       sfpca$pc <- k
       sfpca$knot <- d
       print(paste('index i is:', i, 'number of PC:', k, 'number of knots:', d))
-      results_basis <- basis_setup_sparse(da_list = sfpca_data,
+      results_basis <- basis_setup_sparse(sfpca_data = sfpca_data,
                                           nknots = d, orth = TRUE)
       sfpca$basis <- results_basis
       pca_data <- list(N = sfpca_data$num_subjects,

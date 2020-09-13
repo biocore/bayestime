@@ -34,6 +34,7 @@ effectSize_rda <- function(output, model, variables){
   table$ES.RDA <- R2.adj
   table <- table[-table.row, ]
   print(step.res$call)
+  rownames(table) <- gsub('[+] ', '', rownames(table))
   covariates <- rownames(table)
   print(ggplot2::ggplot(table, aes(x=reorder(covariates, ES.RDA), y=ES.RDA,
                              fill=covariates)) +
