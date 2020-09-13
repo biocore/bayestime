@@ -5,7 +5,14 @@
 \title{plot boxplot of model fpc scores by group
 Suggestion: take out missing values beforehand}
 \usage{
-plot_fpc_boxplot(output, group_name)
+plot_fpc_boxplot(
+  output,
+  pc_idx,
+  group_name,
+  testing_type = "parametric",
+  pairwise_testing = FALSE,
+  adjust_meth = "bonferroni"
+)
 }
 \arguments{
 \item{group_name}{One column name of interested group variables in data}

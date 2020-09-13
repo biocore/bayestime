@@ -4,7 +4,15 @@
 \alias{plot_fpc_curve}
 \title{A function to plot fpc curves}
 \usage{
-plot_fpc_curve(output, pc_idx, ymin = NULL, ymax = NULL)
+plot_fpc_curve(
+  output,
+  pc_idx,
+  original = FALSE,
+  xlab = NULL,
+  ylab = NULL,
+  ymin = NULL,
+  ymax = NULL
+)
 }
 \arguments{
 \item{output}{The model output list from output_results() function}

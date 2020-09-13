@@ -1,16 +1,16 @@
 #' A function to draw k diganostic plot
 #'
-#' @param data: The prepared data from prepare_data() function (list)
+#' @param sfpca_data: The prepared data from prepare_data() function (list)
 #' @param model: The optimal sfpca model
 #' @import ggplot2
 #' @import bayesplot
 #' @export
 
-plot_k_diagnostic <- function(da_list, model){
+plot_k_diagnostic <- function(sfpca_data, model){
   loo_best <- model$looic
   pkdf <- data.frame(pk = loo_best$diagnostics$pareto_k,
-                     id = unique(da_list$data$ID),
-                     xaxis = 1:length(unique(da_list$data$ID)))
+                     id = unique(sfpca_data$data$ID),
+                     xaxis = 1:length(unique(sfpca_data$data$ID)))
   print(ggplot2::ggplot(pkdf, aes(x = xaxis,y = pk)) +
           geom_text(data=subset(pkdf, pk > 0.7),
                     aes(x = xaxis,y = pk, label = xaxis),
@@ -29,8 +29,8 @@ plot_k_diagnostic <- function(da_list, model){
   bad <- pkdf[pkdf$pk > 0.7, ]
   if (nrow(bad) != 0){
     print(paste('Warning: observation ', bad$xaxis,
-                '(this is the 1:N number)(subject ID ', bad$id,
-                ')have Pareto k-values greater than 0.7 at ',
+                '(subject ID ', bad$id,
+                ') has Pareto k-values greater than 0.7 at ',
                 round(bad$pk, 4), sep = ''))
   }
 }
