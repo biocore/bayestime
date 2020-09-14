@@ -9,9 +9,8 @@ plot_fpc_boxplot(
   output,
   pc_idx,
   group_name,
-  testing_type = "parametric",
-  pairwise_testing = FALSE,
-  adjust_meth = "bonferroni"
+  testing_type = c("parametric", "non-parametric"),
+  pairwise_testing = FALSE
 )
 }
 \arguments{

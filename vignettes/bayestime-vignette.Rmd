@@ -16,8 +16,9 @@ knitr::opts_chunk$set(
 ```
 
 ```{r, include = FALSE}
+
 #library(devtools)
-#install_github('y1zhong/bayestime')
+#install_github('biocore/bayestime')
 devtools::load_all('.')
 library(BayesTime)
 ```

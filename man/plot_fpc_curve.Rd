@@ -22,6 +22,10 @@ plot_fpc_curve(
 \item{ymin}{The minimum of y lab}
 
 \item{ymax}{The maximum of y lab}
+
+\item{xlab:}{Manually set x axis title}
+
+\item{ylab:}{Manually set y axis title}
 }
 \description{
 A function to plot fpc curves

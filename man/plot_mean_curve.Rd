@@ -18,6 +18,10 @@ plot_mean_curve(
 
 \item{original:}{The option to plot with original or transformed}
 
+\item{xlab:}{Manually set x axis title}
+
+\item{ylab:}{Manually set y axis title}
+
 \item{ymin:}{Manually set minimum of y lab}
 
 \item{ymax:}{Manually set maximum of y lab}
