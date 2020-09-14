@@ -9,6 +9,8 @@ plot_fpc_group_mean(
   pc_idx,
   original = FALSE,
   group_name,
+  xlab = NULL,
+  ylab = NULL,
   ymin = NULL,
   ymax = NULL
 )
@@ -25,6 +27,10 @@ plot_fpc_group_mean(
 \item{ymax}{The maximum of y lab}
 
 \item{output:}{The model output list from output_results() function}
+
+\item{xlab:}{Manually set x axis title}
+
+\item{ylab:}{Manually set y axis title}
 }
 \description{
 plot group mean of fpc scores

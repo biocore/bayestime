@@ -4,10 +4,10 @@
 \alias{plot_k_diagnostic}
 \title{A function to draw k diganostic plot}
 \usage{
-plot_k_diagnostic(da_list, model)
+plot_k_diagnostic(sfpca_data, model)
 }
 \arguments{
-\item{data:}{The prepared data from prepare_data() function (list)}
+\item{sfpca_data:}{The prepared data from prepare_data() function (list)}
 
 \item{model:}{The optimal sfpca model}
 }
