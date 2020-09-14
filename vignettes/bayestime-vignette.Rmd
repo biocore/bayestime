@@ -41,7 +41,9 @@ response <- 'shannon'
 ## plot_qqplot(): Check if data is normally distributed
 Since model fitting requires a normally distributed variable, we first need to check if the response variable needs any transformation. BayesTime::plot_qqplot() takes a dataframe and a column name of response variable to generate qqPlot of the original, log transformation, and square root of the response variable. 
 ```{r, fig.height = 6, fig.width=6, results=FALSE}
+tiff('~/Dropbox/lab/SFPCA/qqplot.tiff')
 plot_qqplot(ECAM, 'shannon')
+dev.off()
 ```
 
 We can see that the original response vairable is more normally distributed than other transformation. So we keep the data as it is, otherwise the variable needs to be transformed.
@@ -124,7 +126,9 @@ BayesTime::plot_residual() takes the output from output_results() and generates 
 
 ## plot_mean_curve(): ***
 ```{r, fig.height = 4, fig.width=6}
+#tiff('~/Dropbox/lab/SFPCA/meancurve_plot.tiff')
 plot_mean_curve(output = model_output, original = T, xlab = 'age', ylab = 'shannon', ymin=0, ymax=7.6)
+#dev.off()
 plot_mean_curve(output = model_output, original = F, xlab = 'age', ylab = 'shannon')
 ```
 

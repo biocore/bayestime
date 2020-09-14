@@ -29,7 +29,7 @@ plot_k_diagnostic <- function(sfpca_data, model){
   bad <- pkdf[pkdf$pk > 0.7, ]
   if (nrow(bad) != 0){
     print(paste('Warning: observation ', bad$xaxis,
-                '(subject ID ', bad$id,
+                ' (subject ID ', bad$id,
                 ') has Pareto k-values greater than 0.7 at ',
                 round(bad$pk, 4), sep = ''))
   }
