@@ -30,17 +30,18 @@ plot_fpc_curve <- function(output, pc_idx, original=FALSE,
   }
 
   sigma_y <- sd(response)
-  if (is.null(ymin)) ymin <- floor(min((FPC_mean * sigma_y))) - 0.5
-  if (is.null(ymax)) ymax <- ceiling(max((FPC_mean * sigma_y))) + 0.5
+  mu_y <- mean(response)
+  if (is.null(ymin)) ymin <- floor(min((FPC_mean * sigma_y + mu_y))) - 0.5
+  if (is.null(ymax)) ymax <- ceiling(max((FPC_mean * sigma_y + mu_y))) + 0.5
   if (is.null(xlab)) xlab = 'time'
   if (is.null(ylab)) ylab = 'response'
 
   plot(time_cont * (max(time) - min(time)) + min(time),
-       FPC_mean[, 1] * sigma_y, type="n", ylim = c(ymin, ymax),
+       FPC_mean[, 1] * sigma_y + mu_y, type="n", ylim = c(ymin, ymax),
        xlab = xlab, ylab=ylab, font.lab = 2, cex.lab = 1.2)
   for (k in pc_idx) {
     lines(time_cont * (max(time) - min(time)) + min(time),
-          FPC_mean[, k] * sigma_y, type = "l",lwd = 3,lty = 1, col = k)
+          FPC_mean[, k] * sigma_y + mu_y, type = "l",lwd = 3,lty = 1, col = k)
   }
   title(main = 'FPC Curves')
   legend('topright', pc_names, lty = rep(1, K), lwd = rep(3, K),

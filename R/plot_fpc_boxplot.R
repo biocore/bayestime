@@ -68,7 +68,8 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
 
   var_tp <- group_name
   colnames(df_tt) <- c('ID', pc_name, var_tp)
-  p <- ggboxplot(df_tt, x = var_tp, y = pc_name, color=var_tp, add = "jitter")
+  p <- ggboxplot(df_tt, x = var_tp, y = pc_name,
+                 color=var_tp, add = "jitter", ylab = paste(pc_name, 'scores'))
   p <- p + p_global
   if (pairwise_testing == TRUE) p <- p+ p_pairwise
   print(ggpar(p, legend = 'none'))
