@@ -11,7 +11,7 @@
 #' @param ymin The minimum of y lab
 #' @param ymax The maximum of y lab
 #' @return The data used for the plot
-#' @importFrom reshape melt
+#' @import reshape
 #' @export
 plot_fpc_on_mean_curve <- function(output, pc_idx,
                                    original = FALSE, sd = FALSE,
@@ -65,7 +65,7 @@ plot_fpc_on_mean_curve <- function(output, pc_idx,
     plot_data$pc_plus <- (Mu_functions + FPC_mean[, k]) * sigma_y + mu_y
     plot_data$pc_minus <- (Mu_functions - FPC_mean[, k]) * sigma_y + mu_y
   }
-  plot_melt <- melt(data = plot_data, id.vars = c("time"),
+  plot_melt <- reshape::melt(data = plot_data, id.vars = c("time"),
                     measure.vars = colnames(plot_data)[-1])
   print(ggplot() +
       geom_line(data=plot_melt, aes(x = time, y = value, color = variable)) +
