@@ -1,8 +1,13 @@
 #' plot boxplot of model fpc scores by group
 #' Suggestion: take out missing values beforehand
 #'
-#' @param output: The model output list from output_results() function
+#' @param output The model output list from output_results() function
+#' @param pc_idx The pc index number
 #' @param group_name One column name of interested group variables in data
+#' @param testing_type The option to set (non-)parametric test
+#' @param pairwise_testing The option to set pairwise test
+#' @param global_testing The option to set global test
+#' @param group_order The string vector for boxplot order
 #' @importFrom dplyr %>%
 #' @importFrom dplyr filter
 #' @importFrom dplyr group_by
@@ -13,7 +18,9 @@
 #' @export
 plot_fpc_boxplot <- function(output, pc_idx, group_name,
                              testing_type = c('parametric', 'non-parametric'),
-                             pairwise_testing = FALSE){
+                             pairwise_testing = FALSE,
+                             global_testing = FALSE,
+                             group_order = NULL){
   df <- output$df
   pc_name <- paste('fpc', pc_idx, sep = '')
   df_temp <- data.frame(df$ID, df[, pc_name], df[, group_name])
@@ -28,8 +35,13 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
     group_by(var_temp) %>%
     summarise(mean(fpc))
   df_mean <- df_mean[order(df_mean$`mean(fpc)`, decreasing = T), ]
-  df_tt$var_temp <- factor(as.character(df_tt$var_temp),
+  if (is.null(group_order)) {
+     df_tt$var_temp <- factor(as.character(df_tt$var_temp),
                            levels = c(as.character(df_mean$var_temp)))
+  } else {
+    df_tt$var_temp <- factor(as.character(df_tt$var_temp),
+                             levels = group_order)
+  }
 
   if (testing_type == 'non-parametric'){
     meth = ifelse(length(table(df_temp$var_temp)) > 2, 'kruskal.test','wilcox.test')
@@ -69,8 +81,12 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
   var_tp <- group_name
   colnames(df_tt) <- c('ID', pc_name, var_tp)
   p <- ggboxplot(df_tt, x = var_tp, y = pc_name,
-                 color=var_tp, add = "jitter", ylab = paste(pc_name, 'scores'))
-  p <- p + p_global
+                 color=var_tp, add = "jitter",
+                 ylab = paste(pc_name, 'scores'),
+                 strip.text.x=element_text(size=10, face="bold.italic"),
+                 strip.text.y=element_text(size=10, face="bold.italic"))
+  if (global_testing == TRUE) p <- p + p_global
   if (pairwise_testing == TRUE) p <- p+ p_pairwise
   print(ggpar(p, legend = 'none'))
+  return(df_tt)
 }

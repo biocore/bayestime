@@ -10,13 +10,25 @@ plot_fpc_boxplot(
   pc_idx,
   group_name,
   testing_type = c("parametric", "non-parametric"),
-  pairwise_testing = FALSE
+  pairwise_testing = FALSE,
+  global_testing = FALSE,
+  group_order = NULL
 )
 }
 \arguments{
+\item{output}{The model output list from output_results() function}
+
+\item{pc_idx}{The pc index number}
+
 \item{group_name}{One column name of interested group variables in data}
 
-\item{output:}{The model output list from output_results() function}
+\item{testing_type}{The option to set (non-)parametric test}
+
+\item{pairwise_testing}{The option to set pairwise test}
+
+\item{global_testing}{The option to set global test}
+
+\item{group_order}{The string vector for boxplot order}
 }
 \description{
 plot boxplot of model fpc scores by group
