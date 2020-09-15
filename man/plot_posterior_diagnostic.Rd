@@ -4,7 +4,7 @@
 \alias{plot_posterior_diagnostic}
 \title{A function to draw density overlay plot}
 \usage{
-plot_posterior_diagnostic(sfpca_data, model)
+plot_posterior_diagnostic(sfpca_data, model, x_lab = NULL, y_lab = NULL)
 }
 \arguments{
 \item{sfpca_data:}{The prepared data from prepare_data() function (list)}

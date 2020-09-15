@@ -44,7 +44,8 @@ plot_k_diagnostic <- function(sfpca_data, model){
 #' @import bayesplot
 #' @export
 
-plot_posterior_diagnostic <- function(sfpca_data, model){
+plot_posterior_diagnostic <- function(sfpca_data, model,
+                                      x_lab = NULL, y_lab = NULL){
   sa <- model$sa
   Nsamples <- model$Nsamples
   Nchains <- model$Nchains
@@ -63,6 +64,9 @@ plot_posterior_diagnostic <- function(sfpca_data, model){
   bayesplot::color_scheme_set("brightblue")
   k <- model$pc
   d <- model$knot
+  if (is.null(x_lab)) x_lab = 'time'
+  if (is.null(y_lab)) y_lab = 'standardized response'
   print(bayesplot::ppc_dens_overlay(sfpca_data$data$response, Ynew_transform) +
-    ggplot2::ggtitle(paste(k, 'pc_', d, 'knot', sep = '')))
+    ggplot2::ggtitle('posterior predictive checking')) +
+    labs(x = x_lab, y = y_lab)
 }
