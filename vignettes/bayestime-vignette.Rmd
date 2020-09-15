@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 
 #library(devtools)
 #install_github('biocore/bayestime')
+install_github('y1zhong/bayestime')
 devtools::load_all('.')
 library(BayesTime)
 ```
@@ -139,8 +140,9 @@ plot_fpc_curve(output = model_output, pc_idx = c(1,2,3), original = T)
 
 ## plot_fpc_on_mean_curve(): 
 ```{r, fig.height = 4, fig.width=6}
-plot_fpc_on_mean_curve(output = model_output, pc_idx = 1, original = T)
-plot_fpc_on_mean_curve(output = model_output, pc_idx = 2, original = F)
+fpc_on_mean_curve_data <- plot_fpc_on_mean_curve(output = model_output, pc_idx = 1, original = T, sd = F)
+     
+fpc_on_mean_curve_data2 <- plot_fpc_on_mean_curve(output = model_output, pc_idx = 2, original = F, sd = T)
 ```
 
 ## plot_fpc_group_mean():
@@ -151,8 +153,12 @@ plot_fpc_group_mean(model_output, pc_idx = 1, original = T, 'delivery')
 ## plot_fpc_boxplot(): Generate boxplot for fpc score by group
 BayesTime::plot_fpc_boxplot() generates the boxplot of fpc scores from sfpca model and compare them by group. This function takes the output list from output_results() and the vector of variables that are invariant with time.
 ```{r, fig.height = 4, fig.width=6}
-plot_fpc_boxplot(output = model_output, pc_idx = 1, group_name = 'diet_3',
+boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 1, group_name = 'diet_3',
                  testing_type = 'parametric', pairwise_testing = T)
+boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 1,
+                                 group_name = 'diet_3', testing_type = 'parametric',
+                                 pairwise_testing = F, global_testing = F,
+                                 group_order = c('eb', 'fd', 'bd'))
 ```
 
 

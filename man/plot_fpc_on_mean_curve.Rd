@@ -8,8 +8,9 @@ plot_fpc_on_mean_curve(
   output,
   pc_idx,
   original = FALSE,
-  xlab = NULL,
-  ylab = NULL,
+  sd = FALSE,
+  x_lab = NULL,
+  y_lab = NULL,
   ymin = NULL,
   ymax = NULL
 )
@@ -26,9 +27,14 @@ time and response value}
 
 \item{ymax}{The maximum of y lab}
 
-\item{xlab:}{Manually set x axis title}
+\item{sd:}{The option to include one standard deviation of fpc scores}
 
-\item{ylab:}{Manually set y axis title}
+\item{x_lab:}{Manually set x axis title}
+
+\item{y_lab:}{Manually set y axis title}
+}
+\value{
+The data used for the plot
 }
 \description{
 A function to plot fpc on mean curves
