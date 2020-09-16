@@ -10,6 +10,13 @@ plot_posterior_diagnostic(sfpca_data, model, x_lab = NULL, y_lab = NULL)
 \item{sfpca_data:}{The prepared data from prepare_data() function (list)}
 
 \item{model:}{The optimal sfpca model}
+
+\item{x_lab:}{Manually set x axis title}
+
+\item{y_lab:}{Manually set y axis title}
+}
+\value{
+A list with the plot and the data used for plot
 }
 \description{
 A function to draw density overlay plot

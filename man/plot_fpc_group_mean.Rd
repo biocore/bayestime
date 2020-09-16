@@ -22,18 +22,18 @@ plot_fpc_group_mean(
 
 \item{group_name}{One column name of interested group variables in data}
 
+\item{ymin}{The minimum of y lab}
+
 \item{ymax}{The maximum of y lab}
 
 \item{output:}{The model output list from output_results() function}
 
 \item{x_lab:}{Manually set x axis title}
 
-\item{ylab:}{Manually set y axis title}
-
-\item{y_min}{The minimum of y lab}
+\item{y_lab:}{Manually set y axis title}
 }
 \value{
-The data used for plot
+A list with the plot and the data used for plot
 }
 \description{
 plot group mean of fpc scores

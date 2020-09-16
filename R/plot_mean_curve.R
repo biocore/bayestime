@@ -6,10 +6,11 @@
 #' @param ylab: Manually set y axis title
 #' @param ymin: Manually set minimum of y lab
 #' @param ymax: Manually set maximum of y lab
+#' @return A list with plot
 #' @export
 
 plot_mean_curve <- function(output, original = FALSE,
-                            xlab=NULL, ylab=NULL,
+                            x_lab=NULL, y_lab=NULL,
                             ymin=NULL, ymax=NULL){
   data <- output$df
   N <- length(unique(data$ID))
@@ -39,19 +40,43 @@ plot_mean_curve <- function(output, original = FALSE,
   if (is.null(ymax)) {
     ymax <- ceiling(max(unlist(Y_sparse) * sigma_y + mu_y,
                         Mu_functions * sigma_y + mu_y)) + 0.1 }
-  if (is.null(xlab)) xlab = 'time'
-  if (is.null(ylab)) ylab = 'response'
+  if (is.null(x_lab)) x_lab = 'time'
+  if (is.null(y_lab)) y_lab = 'response'
 
-  if (is.null(xlab)) xlab = 'time'
-  if (is.null(ylab)) ylab = 'response'
-  plot(time_cont * (max(time) - min(time)) + min(time),
-       Mu_functions * sigma_y + mu_y,
-       ylim = c(ymin, ymax),
-       xlab = xlab, ylab = ylab,
-       type = "l",lwd = 5, col = 4, font.lab = 2, cex.lab = 1.2)
-  for (i in 1:N) {
-    lines(time_sparse[[i]] * (max(time) - min(time)) + min(time),
-          Y_sparse[[i]] * sigma_y + mu_y,
-          type = "l", lwd = .25)
+  p <- ggplot() +
+    geom_line(aes(x = time_cont * (max(time) - min(time)) + min(time),
+                  y = Mu_functions * sigma_y + mu_y, group = 1),
+              color='blue',lwd = 2) +
+    ylim(ymin, ymax) +
+    labs(title= 'Mean Curve',
+         x = x_lab, y = y_lab) +
+    theme_classic() +
+    theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+          axis.text.x = element_text(size = 10, face = "bold"),
+          axis.text.y = element_text(size = 10, face = "bold"),
+          axis.title.x = element_text(size = 12, face = "bold"),
+          axis.title.y = element_text(size = 12, face = "bold"))
+
+
+  for (i in 1:N){
+    p <- p + geom_line(aes_string(x = time_sparse[[i]] *
+                                    (max(time) - min(time)) + min(time),
+                                  y = Y_sparse[[i]] * sigma_y + mu_y, group=1),
+                       lwd = 0.1)
   }
+  # if (!is.null(x_tick)) {
+  #   p <- p + scale_x_continuous(breaks = x_tick)
+  # }
+  print(p)
+  return(results <- list('plot' = p))
+  # plot(time_cont * (max(time) - min(time)) + min(time),
+  #      Mu_functions * sigma_y + mu_y,
+  #      ylim = c(ymin, ymax),
+  #      xlab = x_lab, ylab = y_lab,
+  #      type = "l",lwd = 5, col = 4, font.lab = 2, cex.lab = 1.2)
+  # for (i in 1:N) {
+  #   lines(time_sparse[[i]] * (max(time) - min(time)) + min(time),
+  #         Y_sparse[[i]] * sigma_y + mu_y,
+  #         type = "l", lwd = .25)
+  # }
 }

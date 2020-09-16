@@ -5,10 +5,10 @@
 #' @param group_name One column name of interested group variables in data
 #' @param original The option to plot with original or transformed
 #' @param x_lab: Manually set x axis title
-#' @param ylab: Manually set y axis title
-#' @param y_min The minimum of y lab
+#' @param y_lab: Manually set y axis title
+#' @param ymin The minimum of y lab
 #' @param ymax The maximum of y lab
-#' @return The data used for plot
+#' @return A list with the plot and the data used for plot
 #' @import reshape
 #' @export
 plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
@@ -56,22 +56,39 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
   scores_mu_g <- unlist(lapply(1:groups, function(x){
     mean(data_temp[data_temp[, group_name] == classes[x], fpcs])
     }))
-  plot_data <- data.frame(time_cont * max(time))
+
+  plot_data <- data.frame(time_cont * (max(time) - min(time)) + min(time))
   colnames(plot_data) <- 'time'
   for (j in 1:groups){
       plot_data[, 1 + j] <- (Mu_functions + FPC_mean[, k] * scores_mu_g[j]) *
         sigma_y + mu_y
+      plot_data[, 1 + j] <- as.vector(plot_data[, 1 + j])
       colnames(plot_data)[1 + j] <- classes[j]
   }
 
-  plot_melt <- reshape::melt(plot_data, time, classes)
-  print(ggplot() +
-          geom_line(data=plot_melt, aes(x = time, y = value, color = variable)) +
-          theme_classic() +
-          labs(title= paste(paste('PC', k, sep = ' '),
-                            ' (', prop_var_avg[k], ' )', sep=''),
-               x = x_lab, y = y_lab))
-  return(plot_data)
+  plot_melt <- reshape::melt(plot_data, 'time', classes)
+  p <- ggplot() +
+    geom_line(data=plot_melt, aes(x = time, y = value,
+                                  colour = variable,
+                                  linetype = variable), lwd = 1) +
+    guides(linetype = F) +
+    ylim(ymin, ymax) +
+    labs(colour=group_name) +
+    labs(title= paste(paste('PC', k, sep = ' '),
+                      ' (', prop_var_avg[k], ' )', sep=''),
+         x = x_lab, y = y_lab) +
+    theme_classic() +
+    theme(plot.title = element_text(hjust = 0.5, size = 15,
+                                    face = "bold"),
+          axis.text.x = element_text(size = 10, face = "bold"),
+          axis.text.y = element_text(size = 10, face = "bold"),
+          axis.title.x = element_text(size = 12, face = "bold"),
+          axis.title.y = element_text(size = 12, face = "bold"))
+
+  print(p)
+  return(results <- list('data' = plot_data,
+                         'plot' = p))
+
   # plot(time_cont * max(time), Mu_functions * sigma_y + mu_y,
   #      type="n", lwd = 2,
   #      xlab='Time', ylab='FPC Scores',

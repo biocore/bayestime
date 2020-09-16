@@ -7,8 +7,8 @@
 plot_mean_curve(
   output,
   original = FALSE,
-  xlab = NULL,
-  ylab = NULL,
+  x_lab = NULL,
+  y_lab = NULL,
   ymin = NULL,
   ymax = NULL
 )
@@ -25,6 +25,9 @@ plot_mean_curve(
 \item{ymin:}{Manually set minimum of y lab}
 
 \item{ymax:}{Manually set maximum of y lab}
+}
+\value{
+A list with plot
 }
 \description{
 A function to plot mean curces
