@@ -43,25 +43,28 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
                              levels = group_order)
   }
 
-  if (testing_type == 'non-parametric'){
-    meth = ifelse(length(table(df_temp$var_temp)) > 2, 'kruskal.test','wilcox.test')
-    p_global <- stat_compare_means(method=meth, label.y = max(df_tt$fpc)*1.5)
-    if (pairwise_testing == TRUE){
+  if (testing_type == 'non-parametric') {
+    meth = ifelse(length(table(df_temp$var_temp)) > 2,
+                  'kruskal.test', 'wilcox.test')
+    p_global <- stat_compare_means(method = meth,
+                                   label.y = max(df_tt$fpc) * 1.5)
+    if (pairwise_testing == TRUE) {
       df_test <- df_tt[, -1]
       stat_test <- df_test %>%
         rstatix::pairwise_wilcox_test(
           fpc ~ var_temp
-        )
+          )
       stat_test <- stat_test[stat_test$p <= 0.05, ]
       stat_test_g1 <- stat_test$group1
       stat_test_g2 <- stat_test$group2
       stat_test_list <- mapply(c, stat_test_g1, stat_test_g2, SIMPLIFY = F)
       p_pairwise <- stat_compare_means(comparisons = stat_test_list,
-                                       method='wilcox.test')
+                                       method = 'wilcox.test')
     }
   } else {
     meth = ifelse(length(table(df_temp$var_temp)) > 2, 'anova','t.test')
-    p_global <- stat_compare_means(method=meth, label.y = max(df_tt$fpc)*1.5)
+    p_global <- stat_compare_means(method = meth,
+                                   label.y = max(df_tt$fpc) * 1.5)
     if (pairwise_testing == TRUE){
       df_test <- df_tt[, -1]
       stat_test <- df_test %>%
@@ -73,7 +76,7 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
       stat_test_g2 <- stat_test$group2
       stat_test_list <- mapply(c, stat_test_g1, stat_test_g2, SIMPLIFY = F)
       p_pairwise <- stat_compare_means(comparisons = stat_test_list,
-                                       method='t.test')
+                                       method = 't.test')
     }
   }
 
@@ -81,12 +84,14 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
   var_tp <- group_name
   colnames(df_tt) <- c('ID', pc_name, var_tp)
   p <- ggboxplot(df_tt, x = var_tp, y = pc_name,
-                 color=var_tp, add = "jitter",
+                 color = var_tp, add = "jitter",
                  ylab = paste(pc_name, 'scores'),
-                 strip.text.x=element_text(size=10, face="bold.italic"),
-                 strip.text.y=element_text(size=10, face="bold.italic"))
+                 strip.text.x = element_text(size = 10, face = "bold.italic"),
+                 strip.text.y = element_text(size = 10, face = "bold.italic"))
   if (global_testing == TRUE) p <- p + p_global
   if (pairwise_testing == TRUE) p <- p+ p_pairwise
-  print(ggpar(p, legend = 'none'))
-  return(df_tt)
+  p <- ggpar(p, legend = 'none')
+  print(p)
+  return(results <- list('data' = df_tt,
+                         'plot' = p))
 }

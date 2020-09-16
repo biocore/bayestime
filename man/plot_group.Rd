@@ -18,6 +18,9 @@ plot_group(data, time_name, response_name, unique_subject_id, variable_name)
 
 \item{response_name:}{the column name of the intersted response variable (string)}
 }
+\value{
+A list with the plot and the data used for plot
+}
 \description{
 A function to generate plots of a group of variables
 Suggestion: take out missing values beforehand

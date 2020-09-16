@@ -1,4 +1,3 @@
-
 #' A function to plot fpc on mean curves
 #'
 #' @param output The model output list from output_results() function
@@ -10,7 +9,7 @@
 #' @param y_lab: Manually set y axis title
 #' @param ymin The minimum of y lab
 #' @param ymax The maximum of y lab
-#' @return The data used for the plot
+#' @return A list with the plot and the data used for plot
 #' @import reshape
 #' @export
 plot_fpc_on_mean_curve <- function(output, pc_idx,
@@ -67,13 +66,28 @@ plot_fpc_on_mean_curve <- function(output, pc_idx,
   }
   plot_melt <- reshape::melt(data = plot_data, id.vars = c("time"),
                     measure.vars = colnames(plot_data)[-1])
-  print(ggplot() +
-      geom_line(data=plot_melt, aes(x = time, y = value, color = variable)) +
-      theme_classic() +
-      labs(title= paste(paste('PC', k, sep=' '), ' (',
-                        prop_var_avg[k], ' )', sep=''),
-           x = x_lab, y = y_lab))
-  return(plot_data)
+  plot_melt$type <- factor(ifelse(plot_melt$variable != y_lab, 'pcs', y_lab),
+                           levels = c(y_lab, 'pcs'))
+  p <- ggplot() +
+    geom_line(data=plot_melt, aes(x = time, y = value,
+                                  color = variable,
+                                  linetype = type), lwd = 1) +
+    guides(linetype = F) +
+    labs(title= paste(paste('PC', k, sep=' '), ' (',
+                      prop_var_avg[k], ' )', sep=''),
+         colour = 'curves', x = x_lab, y = y_lab) +
+    theme_classic() +
+    theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+          axis.text.x = element_text(size = 10, face = "bold"),
+          axis.text.y = element_text(size = 10, face = "bold"),
+          axis.title.x = element_text(size = 12, face = "bold"),
+          axis.title.y = element_text(size = 12, face = "bold")) +
+    scale_color_manual(values = c(response = "black",
+                                  pc_plus = "orange",
+                                  pc_minus = "blue" ))
+  print(p)
+  return(results <- list('data' = plot_data,
+                         'plot' = p))
   # plot(time_cont * (max(time) - min(time)) + min(time),
   #       Mu_functions * sigma_y + mu_y,
   #      type = "l", ylim = c(ymin, ymax), lwd = 2,col = 1,

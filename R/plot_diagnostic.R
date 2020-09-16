@@ -39,11 +39,13 @@ plot_k_diagnostic <- function(sfpca_data, model){
 #'
 #' @param sfpca_data: The prepared data from prepare_data() function (list)
 #' @param model: The optimal sfpca model
+#' @param x_lab: Manually set x axis title
+#' @param y_lab: Manually set y axis title
+#' @return A list with the plot and the data used for plot
 #' @import ggplot2
 #' @import rstan
 #' @import bayesplot
 #' @export
-
 plot_posterior_diagnostic <- function(sfpca_data, model,
                                       x_lab = NULL, y_lab = NULL){
   sa <- model$sa
@@ -64,9 +66,17 @@ plot_posterior_diagnostic <- function(sfpca_data, model,
   bayesplot::color_scheme_set("brightblue")
   k <- model$pc
   d <- model$knot
-  if (is.null(x_lab)) x_lab = 'time'
-  if (is.null(y_lab)) y_lab = 'standardized response'
-  print(bayesplot::ppc_dens_overlay(sfpca_data$data$response, Ynew_transform) +
-    ggplot2::ggtitle('posterior predictive checking')) +
-    labs(x = x_lab, y = y_lab)
+  if (is.null(x_lab)) x_lab = 'standardized response'
+  #if (is.null(y_lab)) y_lab = ''
+  #plot_data <- data.frame(sfpca_data$data$response, Ynew_transform)
+  p <- bayesplot::ppc_dens_overlay(sfpca_data$data$response, Ynew_transform) +
+    ggplot2::ggtitle('Posterior Predictive Checking') +
+    theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+          axis.text.x = element_text(size = 10, face = "bold"),
+          axis.text.y = element_text(size = 10, face = "bold"),
+          axis.title.x = element_text(size = 12, face = "bold"),
+          axis.title.y = element_text(size = 12, face = "bold")) +
+    labs(x = x_lab)
+  print(p)
+  return(results <- list('plot' = p))
 }

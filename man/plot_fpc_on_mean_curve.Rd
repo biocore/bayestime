@@ -34,7 +34,7 @@ time and response value}
 \item{y_lab:}{Manually set y axis title}
 }
 \value{
-The data used for the plot
+A list with the plot and the data used for plot
 }
 \description{
 A function to plot fpc on mean curves
