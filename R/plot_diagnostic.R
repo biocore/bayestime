@@ -78,5 +78,5 @@ plot_posterior_diagnostic <- function(sfpca_data, model,
           axis.title.y = element_text(size = 12, face = "bold")) +
     labs(x = x_lab)
   print(p)
-  return(results <- list('plot' = p))
+  return(results <- list('figure' = p))
 }

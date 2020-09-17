@@ -48,5 +48,5 @@ effectSize_rda <- function(output, model, variables, trace = FALSE){
     coord_flip()
   print(p)
   return(results <- list('data' = table,
-                         'plot' = p))
+                         'figure' = p))
 }

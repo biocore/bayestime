@@ -68,6 +68,7 @@ plot_fpc_on_mean_curve <- function(output, pc_idx,
   }
   plot_melt <- reshape::melt(data = plot_data, id.vars = c("time"),
                     measure.vars = colnames(plot_data)[-1])
+  plot_melt$type <- ifelse(plot_melt$variable == 'mean', 'mean', 'pc')
   p <- ggplot() +
     geom_line(data=plot_melt, aes(x = time, y = value,
                                   color = variable,
@@ -86,11 +87,11 @@ plot_fpc_on_mean_curve <- function(output, pc_idx,
           axis.title.y = element_text(size = 12, face = "bold")) +
     scale_color_manual(values = c("black",
                                   "orange",
-                                   "blue" ))+
-    scale_linetype_manual(name = 'curve',values = c("solid", "dotted", "dotted"))
+                                   "blue" ))
+    #scale_linetype_manual(name = 'curve',values = c("solid", "dotted", "dotted"))
   print(p)
   return(results <- list('data' = plot_data,
-                         'plot' = p))
+                         'figure' = p))
   # plot(time_cont * (max(time) - min(time)) + min(time),
   #       Mu_functions * sigma_y + mu_y,
   #      type = "l", ylim = c(ymin, ymax), lwd = 2,col = 1,

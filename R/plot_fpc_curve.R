@@ -69,7 +69,7 @@ plot_fpc_curve <- function(output, pc_idx, original=FALSE,
   print(p)
 
   return(results <- list('data' = plot_data,
-                         'plot' = p))
+                         'figure' = p))
   # plot(time_cont * (max(time) - min(time)) + min(time),
   #      FPC_mean[, 1] * sigma_y + mu_y, type="n", ylim = c(ymin, ymax),
   #      xlab = x_lab, ylab=y_lab, font.lab = 2, cex.lab = 1.2)
