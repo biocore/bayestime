@@ -27,13 +27,7 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
                              pairwise_testing = FALSE,
                              pval_show_all = FALSE,
                              global_testing = FALSE,
-<<<<<<< HEAD
                              p_adjust_meth = "none",
-=======
-                             p_adjust_meth = c("none", "holm", "hochberg",
-                                                 "hommel", "bonferroni",
-                                                 "BH", "BY", "fdr"),
->>>>>>> 74231b3908addf322f0658ff3dda9185005332e2
                              group_order = NULL){
   df <- output$df
   pc_name <- paste('fpc', pc_idx, sep = '')
@@ -130,10 +124,6 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
 
   if (is.null(x_lab)) x_lab = group_name
   if (is.null(y_lab)) y_lab = paste(pc_name, 'scores')
-<<<<<<< HEAD
-=======
-
->>>>>>> 74231b3908addf322f0658ff3dda9185005332e2
   var_tp <- group_name
   colnames(df_tt) <- c('ID', pc_name, var_tp)
   p <- ggboxplot(df_tt, x = var_tp, y = pc_name,
