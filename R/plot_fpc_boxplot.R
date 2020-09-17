@@ -22,13 +22,18 @@
 #' @export
 plot_fpc_boxplot <- function(output, pc_idx, group_name,
                              x_lab = NULL, y_lab = NULL, p_title = NULL,
+                             ymin = NULL, ymax = NULL,
                              testing_type = c('parametric', 'non-parametric'),
                              pairwise_testing = FALSE,
                              pval_show_all = FALSE,
                              global_testing = FALSE,
+<<<<<<< HEAD
+                             p_adjust_meth = "none",
+=======
                              p_adjust_meth = c("none", "holm", "hochberg",
                                                  "hommel", "bonferroni",
                                                  "BH", "BY", "fdr"),
+>>>>>>> 74231b3908addf322f0658ff3dda9185005332e2
                              group_order = NULL){
   df <- output$df
   pc_name <- paste('fpc', pc_idx, sep = '')
@@ -91,6 +96,18 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
         stat_test <- stat_test[stat_test$p.adj <= 0.05, ]
       }
     }
+    stat_test_g1 <- stat_test$group1
+    stat_test_g2 <- stat_test$group2
+    stat_test_list <- mapply(c, stat_test_g1, stat_test_g2, SIMPLIFY = F)
+
+    if (p_adjust_meth == 'none') {
+      p_pairwise <- stat_compare_means(comparisons = stat_test_list,
+                                       method = pairwise_meth)
+    } else {
+      stat_test <- stat_test %>% add_xy_position(x = 'var_temp')
+      p_pairwise <- stat_pvalue_manual(stat_test, label = 'p.adj',
+                                       step.increase = 0.05)
+    }
   }
   stat_test_g1 <- stat_test$group1
   stat_test_g2 <- stat_test$group2
@@ -107,9 +124,16 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
   # p_pairwise <- stat_compare_means(comparisons = stat_test_list,
   #                                  method = 't.test')
 
+
+  # p_pairwise <- stat_compare_means(comparisons = stat_test_list,
+  #                                  method = 't.test')
+
   if (is.null(x_lab)) x_lab = group_name
   if (is.null(y_lab)) y_lab = paste(pc_name, 'scores')
+<<<<<<< HEAD
+=======
 
+>>>>>>> 74231b3908addf322f0658ff3dda9185005332e2
   var_tp <- group_name
   colnames(df_tt) <- c('ID', pc_name, var_tp)
   p <- ggboxplot(df_tt, x = var_tp, y = pc_name,
