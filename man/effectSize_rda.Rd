@@ -4,7 +4,7 @@
 \alias{effectSize_rda}
 \title{Function to perform rda analysis on fpc score from model}
 \usage{
-effectSize_rda(output, model, variables)
+effectSize_rda(output, model, variables, trace = FALSE)
 }
 \arguments{
 \item{output:}{The output list from output_results() function}
@@ -14,7 +14,7 @@ effectSize_rda(output, model, variables)
 \item{variables:}{A list of interested variables for rda analysis}
 }
 \value{
-A list of results from sfpca model and function
+A list of results with plot and rda table
 }
 \description{
 Function to perform rda analysis on fpc score from model

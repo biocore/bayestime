@@ -9,6 +9,9 @@ plot_fpc_boxplot(
   output,
   pc_idx,
   group_name,
+  x_lab = NULL,
+  y_lab = NULL,
+  p_title = NULL,
   testing_type = c("parametric", "non-parametric"),
   pairwise_testing = FALSE,
   global_testing = FALSE,
@@ -21,6 +24,12 @@ plot_fpc_boxplot(
 \item{pc_idx}{The pc index number}
 
 \item{group_name}{One column name of interested group variables in data}
+
+\item{x_lab}{Manually set x axis title}
+
+\item{y_lab}{Manually set y axis title}
+
+\item{p_title}{Manually set plot title}
 
 \item{testing_type}{The option to set (non-)parametric test}
 

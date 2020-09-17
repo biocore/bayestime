@@ -46,10 +46,13 @@ plot_mean_curve <- function(output, original = FALSE,
   p <- ggplot() +
     geom_line(aes(x = time_cont * (max(time) - min(time)) + min(time),
                   y = Mu_functions * sigma_y + mu_y, group = 1),
-              color='blue',lwd = 2) +
+        #      color='blue',
+              color = 'black',
+              lwd = 2) +
     ylim(ymin, ymax) +
     labs(title= 'Mean Curve',
          x = x_lab, y = y_lab) +
+    ggtitle('Population mean curve') +
     theme_classic() +
     theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
           axis.text.x = element_text(size = 10, face = "bold"),
@@ -59,10 +62,14 @@ plot_mean_curve <- function(output, original = FALSE,
 
 
   for (i in 1:N){
+    if (length(time_sparse[[i]]) == 1) {
+      print(paste('object', i, 'has only 1 observation'))
+      next
+    }
     p <- p + geom_line(aes_string(x = time_sparse[[i]] *
                                     (max(time) - min(time)) + min(time),
-                                  y = Y_sparse[[i]] * sigma_y + mu_y, group=1),
-                       lwd = 0.1)
+                                  y = Y_sparse[[i]] * sigma_y + mu_y),
+                       lwd = 0.1, color=i, group=1)
   }
   # if (!is.null(x_tick)) {
   #   p <- p + scale_x_continuous(breaks = x_tick)

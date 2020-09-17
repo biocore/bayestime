@@ -3,11 +3,12 @@
 #' @param output: The output list from output_results() function
 #' @param model: A set of variable names insterested in original data
 #' @param variables: A list of interested variables for rda analysis
-#' @return A list of results from sfpca model and function
+#' @return A list of results with plot and rda table
 #' @import vegan
 #' @import ggplot2
 #' @export
-effectSize_rda <- function(output, model, variables){
+effectSize_rda <- function(output, model, variables, trace = FALSE){
+  variables <- variables[!variables %in% 'ID']
   df <- output$df
   df <- df[complete.cases(df), ]
   dat <- df[, variables]
@@ -21,7 +22,7 @@ effectSize_rda <- function(output, model, variables){
   mod0 <- vegan::rda(pc ~ 1., dat)  # Model with intercept only
   mod1 <- vegan::rda(pc ~ ., dat)  # Model with all explanatory variables
   set.seed(111)
-  step.res <- vegan::ordiR2step(mod0, mod1, perm.max = 1000)
+  step.res <- vegan::ordiR2step(mod0, mod1, perm.max = 1000, trace = trace)
 
   #add effect-size
   table <- step.res$anova
@@ -33,16 +34,19 @@ effectSize_rda <- function(output, model, variables){
   }
   table$ES.RDA <- R2.adj
   table <- table[-table.row, ]
-  print(step.res$call)
+  if (trace == TRUE) print(step.res$call)
   rownames(table) <- gsub('[+] ', '', rownames(table))
   covariates <- rownames(table)
-  print(ggplot2::ggplot(table, aes(x=reorder(covariates, ES.RDA), y=ES.RDA,
-                             fill=covariates)) +
-          labs(x = 'Non-redundant Covariants', y = 'Effect Size') +
-          geom_bar(stat='identity') +
-          theme(axis.text = element_text(size = 10),
-                axis.title = element_text(size = 14,face = "bold"),
-                legend.position = "none") +
-          coord_flip())
-  return(table)
+  p <- ggplot2::ggplot(table, aes(x=reorder(covariates, ES.RDA), y=ES.RDA,
+                                  fill=covariates)) +
+    labs(x = 'Non-redundant Covariants', y = 'Effect Size') +
+    geom_bar(stat='identity') +
+    theme_classic() +
+    theme(axis.text = element_text(size = 10),
+          axis.title = element_text(size = 14,face = "bold"),
+          legend.position = "none") +
+    coord_flip()
+  print(p)
+  return(results <- list('data' = table,
+                         'plot' = p))
 }
