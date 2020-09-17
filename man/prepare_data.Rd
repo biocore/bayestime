@@ -11,7 +11,8 @@ prepare_data(
   response_name,
   transform_y = "standardize",
   scale_time = FALSE,
-  group_name = NULL
+  group_name = NULL,
+  average = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ prepare_data(
 \item{scale_time}{the option of whether or not to scale the time variable to be within \link{0, 1} (True/False)}
 
 \item{group_name}{the column name of group id, set to NA if no input}
+
+\item{average}{the option to average duplicate response values}
 }
 \value{
 A list containing the prepared data for sfpca model

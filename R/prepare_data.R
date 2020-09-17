@@ -7,7 +7,9 @@
 #' @param transform_y the ways of transforming the response variable: standardize/center/NULL
 #' @param scale_time the option of whether or not to scale the time variable to be within [0, 1] (True/False)
 #' @param group_name the column name of group id, set to NA if no input
+#' @param average the option to average duplicate response values
 #' @return A list containing the prepared data for sfpca model
+#' @importFrom dplyr distinct
 #' @export
 #' @examples
 #' data("ECAM")
@@ -15,25 +17,54 @@
 #' dat <- prepare_data(ECAM, unique_subject_id = 'studyid', time_name = 'month_of_life',
 #'                    response_name = 'shannon', transform_y='standardize', scale_time=T)
 prepare_data = function(data, unique_subject_id, time_name, response_name,
-                        transform_y = 'standardize', scale_time = FALSE, group_name = NULL){
+                        transform_y = 'standardize', scale_time = FALSE,
+                        group_name = NULL, average = FALSE){
 
   if (!(unique_subject_id %in% colnames(data)) |
       !(time_name %in% colnames(data)) |
       !(response_name %in% colnames(data))) stop("Variable name is not in data")
 
+  # data_remove <- data[!duplicated(data[, c(unique_subject_id, ttime_name)]), ]
+  # keys <- c(unique_subject_id, time)
+  # X <- data.table::as.data.table(data)
+  # data_mean <- X[, list(response_mean = mean(shannon)),keys]
   # check if each subject has unique measurement at each time point
-  data_check <- data[, c(as.character(unique_subject_id), as.character(time_name))]
-  if (sum(duplicated(data_check)) != 0) {
-    dupli_ids <- unique(data_check[, unique_subject_id])
-    stop(paste('Subject', paste(dupli_ids, sep = ',', collapse = ','), 'has duplicate measurements.', by= ' '))
+  # data_check <- data[, c(as.character(unique_subject_id), as.character(time_name))]
+  # if (sum(duplicated(data_check)) != 0) {
+  #   dupli_ids <- unique(data_check[, unique_subject_id])
+  #   stop(paste('Subject', paste(dupli_ids, sep = ',', collapse = ','), 'has duplicate measurements.', by= ' '))
+  # }
+
+  ID.list = unique(data[, unique_subject_id])
+  data[, 'response_mean']= data[, response_name]
+  for(i in 1:length(ID.list)){
+    subject_i = data[data[, unique_subject_id] == ID.list[i], ]
+    for (t in subject_i[, time_name]){
+      subject_i_t = subject_i[subject_i[, time_name] %in% t, ]
+      if (dim(subject_i_t)[1] > 1){
+        print(paste('replicated values of subject', i, 'at time', t, sep='_'))
+        if (average == FALSE) {
+          return()
+        } else {
+          data[data[, unique_subject_id] == ID.list[i] &
+                 data[, time_name] %in% t, 'response_mean'] =
+            mean(subject_i_t[, response_name], na.rm=T)
+        }
+      }
+    }
   }
+   data <- dplyr::distinct(data, !!as.name(unique_subject_id),
+                               !!as.name(time_name), .keep_all=TRUE)
+   response_name <- 'response_mean'
 
   # create new ID
   data$ID <- as.character(data[, unique_subject_id])
   N <- length(unique(data$ID)) # total number of unique subjects
 
   #convert time and response to numeric
-  data[, c(time_name, response_name)] <- lapply(data[, c(time_name, response_name)], function(x) as.numeric(as.character(x)))
+  data[, c(time_name, response_name)] <- lapply(data[, c(time_name,
+                                                         response_name)],
+                                                function(x) as.numeric(as.character(x)))
 
   # convert group id to be numeric
   if (!is.null(group_name)) {
@@ -44,7 +75,8 @@ prepare_data = function(data, unique_subject_id, time_name, response_name,
   # keep original time
   if (scale_time == TRUE){
     data$time_ori <- data[, time_name]
-    data$time <- (data[, time_name] - min(data[, time_name])) / (max(data[, time_name]) - min(data[, time_name]))
+    data$time <- (data[, time_name] - min(data[, time_name])) /
+      (max(data[, time_name]) - min(data[, time_name]))
   } else{
     data$time_ori <- data[, time_name]
     data$time <- data[, time_name]

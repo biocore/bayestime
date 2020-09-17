@@ -4,6 +4,9 @@
 #' @param output The model output list from output_results() function
 #' @param pc_idx The pc index number
 #' @param group_name One column name of interested group variables in data
+#' @param x_lab Manually set x axis title
+#' @param y_lab Manually set y axis title
+#' @param p_title Manually set plot title
 #' @param testing_type The option to set (non-)parametric test
 #' @param pairwise_testing The option to set pairwise test
 #' @param global_testing The option to set global test
@@ -17,6 +20,7 @@
 #' @import rstatix
 #' @export
 plot_fpc_boxplot <- function(output, pc_idx, group_name,
+                             x_lab = NULL, y_lab = NULL, p_title = NULL,
                              testing_type = c('parametric', 'non-parametric'),
                              pairwise_testing = FALSE,
                              global_testing = FALSE,
@@ -42,6 +46,7 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
     df_tt$var_temp <- factor(as.character(df_tt$var_temp),
                              levels = group_order)
   }
+
 
   if (testing_type == 'non-parametric') {
     meth = ifelse(length(table(df_temp$var_temp)) > 2,
@@ -80,14 +85,19 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
     }
   }
 
-
+  if (is.null(x_lab)) x_lab = group_name
+  if (is.null(y_lab)) y_lab = paste(pc_name, 'scores')
+  if (is.null(p_title)) p_title = 'FPC boxplot'
   var_tp <- group_name
   colnames(df_tt) <- c('ID', pc_name, var_tp)
   p <- ggboxplot(df_tt, x = var_tp, y = pc_name,
                  color = var_tp, add = "jitter",
-                 ylab = paste(pc_name, 'scores'),
-                 strip.text.x = element_text(size = 10, face = "bold.italic"),
-                 strip.text.y = element_text(size = 10, face = "bold.italic"))
+                 xlab = x_lab, ylab = y_lab, title = p_title,) +
+    theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+          axis.text.x = element_text(size = 10, face = "bold"),
+          axis.text.y = element_text(size = 10, face = "bold"),
+          axis.title.x = element_text(size = 12, face = "bold"),
+          axis.title.y = element_text(size = 12, face = "bold"))
   if (global_testing == TRUE) p <- p + p_global
   if (pairwise_testing == TRUE) p <- p+ p_pairwise
   p <- ggpar(p, legend = 'none')

@@ -53,7 +53,7 @@ plot_fpc_curve <- function(output, pc_idx, original=FALSE,
               lwd = 1) +
     guides(linetype=F) +
     ylim(ymin, ymax) +
-    labs(colour = 'curves') +
+    labs(colour = 'curve') +
     labs(title = 'FPC Curves',
          x = x_lab, y = y_lab) +
     theme_classic() +
