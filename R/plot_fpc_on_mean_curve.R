@@ -73,7 +73,7 @@ plot_fpc_on_mean_curve <- function(output, pc_idx,
     geom_line(data=plot_melt, aes(x = time, y = value,
                                   color = variable,
                                   linetype = variable), lwd = 1) +
-   # guides(linetype = F) +
+    guides(linetype = F) +
     labs(title= paste(paste('PC', k, sep=' '), ' (',
                       prop_var_avg[k], ' )', sep=''),
          colour = 'curve',
