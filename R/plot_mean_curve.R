@@ -69,13 +69,13 @@ plot_mean_curve <- function(output, original = FALSE,
     p <- p + geom_line(aes_string(x = time_sparse[[i]] *
                                     (max(time) - min(time)) + min(time),
                                   y = Y_sparse[[i]] * sigma_y + mu_y),
-                       lwd = 0.1, color=i, group=1)
+                       lwd = 0.1, color=i+1, group=1)
   }
   # if (!is.null(x_tick)) {
   #   p <- p + scale_x_continuous(breaks = x_tick)
   # }
   print(p)
-  return(results <- list('plot' = p))
+  return(results <- list('figure' = p))
   # plot(time_cont * (max(time) - min(time)) + min(time),
   #      Mu_functions * sigma_y + mu_y,
   #      ylim = c(ymin, ymax),

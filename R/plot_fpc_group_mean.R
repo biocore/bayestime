@@ -87,7 +87,7 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
 
   print(p)
   return(results <- list('data' = plot_data,
-                         'plot' = p))
+                         'figure' = p))
 
   # plot(time_cont * max(time), Mu_functions * sigma_y + mu_y,
   #      type="n", lwd = 2,

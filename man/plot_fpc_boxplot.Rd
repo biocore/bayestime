@@ -14,7 +14,10 @@ plot_fpc_boxplot(
   p_title = NULL,
   testing_type = c("parametric", "non-parametric"),
   pairwise_testing = FALSE,
+  pval_show_all = FALSE,
   global_testing = FALSE,
+  p_adjust_meth = c("none", "holm", "hochberg", "hommel", "bonferroni", "BH", "BY",
+    "fdr"),
   group_order = NULL
 )
 }
@@ -34,6 +37,8 @@ plot_fpc_boxplot(
 \item{testing_type}{The option to set (non-)parametric test}
 
 \item{pairwise_testing}{The option to set pairwise test}
+
+\item{pval_show_all}{The option to show all pvals or just the significant}
 
 \item{global_testing}{The option to set global test}
 

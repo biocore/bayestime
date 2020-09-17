@@ -37,5 +37,5 @@ plot_group <- function(data, time_name, response_name,
 
   print(p)
   return(results <- list('data' = group,
-                         'plot' = p))
+                         'figure' = p))
 }
