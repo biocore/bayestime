@@ -17,9 +17,9 @@ knitr::opts_chunk$set(
 
 ```{r, include = FALSE}
 
-# library(devtools)
+ library(devtools)
 # install_github('biocore/bayestime')
-# install_github('y1zhong/bayestime')
+ install_github('y1zhong/bayestime')
 devtools::load_all('.')
 library(BayesTime)
 ```
@@ -166,6 +166,9 @@ BayesTime::plot_fpc_boxplot() generates the boxplot of fpc scores from sfpca mod
 boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 1, group_name = 'diet_3',
                  testing_type = 'parametric', pairwise_testing = T, x_lab = 'group',
                  p_adjust_meth = 'holm', pval_show_all = T)
+boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 1, group_name = 'diet_3',
+                 testing_type = 'non-parametric', pairwise_testing = T, x_lab = 'group',
+                 p_adjust_meth = 'none', pval_show_all = T)
 boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 1,
                                  group_name = 'diet_3', testing_type = 'parametric',
                                  pairwise_testing = F, global_testing = F,
