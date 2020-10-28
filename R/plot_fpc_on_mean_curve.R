@@ -55,7 +55,7 @@ plot_fpc_on_mean_curve <- function(output, pc_idx,
   colnames(plot_data) <- 'time'
   pc_col_names <- paste('mean', c(' + ', ' - '), 'PC', sep = '')
   if (sd == TRUE) {
-    plot_data[, 'mean'] <- Mu_functions * sd(FPC_mean) * sigma_y + mu_y
+    plot_data[, 'mean'] <- Mu_functions * sigma_y + mu_y
     plot_data[, pc_col_names[1]] <- (Mu_functions + FPC_mean[, k]) *
       sd(FPC_mean) * sigma_y + mu_y
     plot_data[, pc_col_names[2]] <-  (Mu_functions - FPC_mean[, k]) *

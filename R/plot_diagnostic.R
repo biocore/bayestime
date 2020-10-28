@@ -2,6 +2,7 @@
 #'
 #' @param sfpca_data: The prepared data from prepare_data() function (list)
 #' @param model: The optimal sfpca model
+#' @return A list with the plot
 #' @import ggplot2
 #' @import bayesplot
 #' @export
@@ -11,7 +12,7 @@ plot_k_diagnostic <- function(sfpca_data, model){
   pkdf <- data.frame(pk = loo_best$diagnostics$pareto_k,
                      id = unique(sfpca_data$data$ID),
                      xaxis = 1:length(unique(sfpca_data$data$ID)))
-  print(ggplot2::ggplot(pkdf, aes(x = xaxis,y = pk)) +
+  p <- ggplot2::ggplot(pkdf, aes(x = xaxis,y = pk)) +
           geom_text(data=subset(pkdf, pk > 0.7),
                     aes(x = xaxis,y = pk, label = xaxis),
                     vjust = -0.5, size = 3) +
@@ -24,8 +25,8 @@ plot_k_diagnostic <- function(sfpca_data, model){
                 axis.text.x = element_text(size = 10, face = "bold"),
                 axis.text.y = element_text(size = 10, face = "bold"),
                 axis.title.x = element_text(size = 12, face = "bold"),
-                axis.title.y = element_text(size = 12, face = "bold")))
-
+                axis.title.y = element_text(size = 12, face = "bold"))
+  print(p)
   bad <- pkdf[pkdf$pk > 0.7, ]
   if (nrow(bad) != 0){
     print(paste('Warning: observation ', bad$xaxis,
@@ -33,6 +34,7 @@ plot_k_diagnostic <- function(sfpca_data, model){
                 ') has Pareto k-values greater than 0.7 at ',
                 round(bad$pk, 4), sep = ''))
   }
+  return(results <- list('figure' = p))
 }
 
 #' A function to draw density overlay plot
@@ -41,7 +43,7 @@ plot_k_diagnostic <- function(sfpca_data, model){
 #' @param model: The optimal sfpca model
 #' @param x_lab: Manually set x axis title
 #' @param y_lab: Manually set y axis title
-#' @return A list with the plot and the data used for plot
+#' @return A list with the plot
 #' @import ggplot2
 #' @import rstan
 #' @import bayesplot

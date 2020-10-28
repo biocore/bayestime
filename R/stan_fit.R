@@ -36,7 +36,7 @@ sfpcaClass <- function(Nsamples = NULL, Nchains = NULL, pc=NULL, knot=NULL,
 #' @export
 
 stan_fit <- function(sfpca_data, Nsamples, Nchains, Ncores=NULL,
-                     PC_range, nknot_range){
+                     PC_range, nknot_range, seed=NULL){
   stan_results <- list()
   i <- 0
   for (k in PC_range) {
@@ -61,9 +61,9 @@ stan_fit <- function(sfpca_data, Nsamples, Nchains, Ncores=NULL,
                        cov_size = sfpca_data$cov.size,
                        B = results_basis$orth_spline_basis_sparse_stacked)
 
-      if (is.null(Ncores)) Ncores = getOption("mc.cores", 1L)
-
-      set.seed(31)
+      if (is.null(Ncores)) Ncores <- getOption("mc.cores", 1L)
+      if (is.null(seed)) seed <- 31
+      set.seed(seed)
       sa <- rstan::sampling(stanmodels$sfpca, data = pca_data, iter = Nsamples,
                             chains = Nchains, cores = Ncores, init = "random")
       sfpca$sa <- sa

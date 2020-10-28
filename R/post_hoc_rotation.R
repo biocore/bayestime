@@ -38,8 +38,8 @@ post_hoc_rotation <- function(sfpca_data, model){
       W_old[,,ind] <- array(W[i, j, ], dim = c(Q, Q))
 
       eigen_temp_sigma <- eigen(W_old[, , ind])
-      v_temp <- eigen_temp_sigma$vectors
-      d_temp <- eigen_temp_sigma$values
+      v_temp <- Re(eigen_temp_sigma$vectors)
+      d_temp <- Re(eigen_temp_sigma$values)
       prop_var <- rbind(prop_var, d_temp / sum(d_temp)) # proportion of variance explained by each PC
 
       for (com in 1:length(d_temp)) {
