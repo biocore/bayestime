@@ -17,10 +17,8 @@ knitr::opts_chunk$set(
 
 ```{r, include = FALSE}
 
- library(devtools)
- install_github('biocore/bayestime')
- install_github('y1zhong/bayestime')
-devtools::load_all('.')
+library(devtools)
+install_github('biocore/bayestime')
 library(BayesTime)
 ```
 This vignette introduces the BayesTime package by a workflow with real data example. This helps those who are unfamiliar with BayesTime package and want to use its functions to analyze longitudinal data. ***
