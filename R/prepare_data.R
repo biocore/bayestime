@@ -58,7 +58,7 @@ prepare_data = function(data, unique_subject_id, time_name, response_name,
    response_name <- 'response_mean'
 
   # create new ID
-  data$ID <- as.numeric(data[, unique_subject_id])
+  data$ID <- as.character(data[, unique_subject_id])
   N <- length(unique(data$ID)) # total number of unique subjects
 
   #convert time and response to numeric
