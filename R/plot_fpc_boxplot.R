@@ -80,6 +80,7 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
           )
     }
   }
+
   if (pairwise_testing == TRUE){
     if (p_adjust_meth == 'none') {
       if (pval_show_all == FALSE){
@@ -95,15 +96,20 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
     stat_test_list <- mapply(c, stat_test_g1, stat_test_g2, SIMPLIFY = F)
     stat_test <- stat_test %>% add_xy_position(x = 'var_temp')
     if (p_adjust_meth == 'none') {
-     # p_pairwise <- stat_compare_means(comparisons = stat_test_list,
-      #                                 method = pairwise_meth)
+      p_pairwise <- stat_compare_means(comparisons = stat_test_list,
+                                       method = pairwise_meth,
+                                       step.increase = 0.05)
 
-      p_pairwise <- stat_pvalue_manual(stat_test, label = 'p',
-                                       step.increase = 0.05)
+      #p_pairwise <- stat_pvalue_manual(stat_test, label = 'p',
+      #                                 step.increase = 0.05)
     } else {
-      #stat_test <- stat_test %>% add_xy_position(x = 'var_temp')
-      p_pairwise <- stat_pvalue_manual(stat_test, label = 'p.adj',
+      p_pairwise <- stat_compare_means(comparisons = stat_test_list,
+                                       method = pairwise_meth,
+                                       p.adjust.methods = p_adjust_meth,
                                        step.increase = 0.05)
+      #stat_test <- stat_test %>% add_xy_position(x = 'var_temp')
+      #p_pairwise <- stat_pvalue_manual(stat_test, label = 'p.adj',
+      #                                 step.increase = 0.05)
     }
   }
 
@@ -121,6 +127,7 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
   # if (is.null(ymax)) ymax <- max(df_tt[, 2])
   var_tp <- group_name
   colnames(df_tt) <- c('ID', pc_name, var_tp)
+  #df_tt[, var_tp] <- as.character(unlist(df_tt[, var_tp]))
   p <- ggboxplot(df_tt, x = var_tp, y = pc_name,
                  color = var_tp, add = "jitter",
                  xlab = x_lab, ylab = y_lab) +

@@ -44,11 +44,6 @@ plot_mean_curve <- function(output, original = FALSE,
   if (is.null(y_lab)) y_lab = 'response'
 
   p <- ggplot() +
-    geom_line(aes(x = time_cont * (max(time) - min(time)) + min(time),
-                  y = Mu_functions * sigma_y + mu_y, group = 1),
-        #      color='blue',
-              color = 'black',
-              lwd = 2) +
     ylim(ymin, ymax) +
     labs(title= 'Mean Curve',
          x = x_lab, y = y_lab) +
@@ -60,7 +55,6 @@ plot_mean_curve <- function(output, original = FALSE,
           axis.title.x = element_text(size = 12, face = "bold"),
           axis.title.y = element_text(size = 12, face = "bold"))
 
-
   for (i in 1:N){
     if (length(time_sparse[[i]]) == 1) {
       print(paste('object', i, 'has only 1 observation'))
@@ -71,6 +65,11 @@ plot_mean_curve <- function(output, original = FALSE,
                                   y = Y_sparse[[i]] * sigma_y + mu_y),
                        lwd = 0.1, color=i+1, group=1)
   }
+
+  p <- p + geom_line(aes(x = time_cont * (max(time) - min(time)) + min(time),
+                         y = Mu_functions * sigma_y + mu_y, group = 1),
+                     #      color='blue',
+                     color = 'black', lwd = 2)
   # if (!is.null(x_tick)) {
   #   p <- p + scale_x_continuous(breaks = x_tick)
   # }
