@@ -73,7 +73,7 @@ plot_mean_curve <- function(output, original = FALSE,
   # if (!is.null(x_tick)) {
   #   p <- p + scale_x_continuous(breaks = x_tick)
   # }
-  print(p)
+  #print(p)
   return(results <- list('figure' = p))
   # plot(time_cont * (max(time) - min(time)) + min(time),
   #      Mu_functions * sigma_y + mu_y,

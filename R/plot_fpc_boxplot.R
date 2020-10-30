@@ -142,7 +142,7 @@ plot_fpc_boxplot <- function(output, pc_idx, group_name,
   if (pairwise_testing == TRUE) p <- p+ p_pairwise
   if (!is.null(p_title)) p <- p + ggtitle(p_title)
   p <- ggpar(p, legend = 'none')
-  print(p)
+  #print(p)
   return(results <- list('data' = df_tt,
                          'figure' = p))
 }
