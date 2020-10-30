@@ -26,7 +26,7 @@ plot_k_diagnostic <- function(sfpca_data, model){
                 axis.text.y = element_text(size = 10, face = "bold"),
                 axis.title.x = element_text(size = 12, face = "bold"),
                 axis.title.y = element_text(size = 12, face = "bold"))
-  print(p)
+  #print(p)
   bad <- pkdf[pkdf$pk > 0.7, ]
   if (nrow(bad) != 0){
     print(paste('Warning: observation ', bad$xaxis,
@@ -79,6 +79,6 @@ plot_posterior_diagnostic <- function(sfpca_data, model,
           axis.title.x = element_text(size = 12, face = "bold"),
           axis.title.y = element_text(size = 12, face = "bold")) +
     labs(x = x_lab)
-  print(p)
+  #print(p)
   return(results <- list('figure' = p))
 }

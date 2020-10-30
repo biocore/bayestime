@@ -35,7 +35,7 @@ plot_group <- function(data, time_name, response_name,
           axis.title.y = element_text(size = 12, face = "bold"),
           legend.position = "top")
 
-  print(p)
+  #print(p)
   return(results <- list('data' = group,
                          'figure' = p))
 }
