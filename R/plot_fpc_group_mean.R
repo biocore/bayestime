@@ -84,7 +84,7 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
           axis.title.x = element_text(size = 12, face = "bold"),
           axis.title.y = element_text(size = 12, face = "bold"))
 
-  print(p)
+  #print(p)
   return(results <- list('data' = plot_data,
                          'figure' = p))
 
