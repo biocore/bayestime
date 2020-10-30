@@ -89,7 +89,7 @@ plot_fpc_on_mean_curve <- function(output, pc_idx,
                                   "orange",
                                    "blue" ))
     #scale_linetype_manual(name = 'curve',values = c("solid", "dotted", "dotted"))
-  print(p)
+  #print(p)
   return(results <- list('data' = plot_data,
                          'figure' = p))
   # plot(time_cont * (max(time) - min(time)) + min(time),

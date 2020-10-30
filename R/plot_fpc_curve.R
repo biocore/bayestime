@@ -66,7 +66,7 @@ plot_fpc_curve <- function(output, pc_idx, original=FALSE,
   if (!is.null(x_tick)) {
     p <- p + scale_x_continuous(breaks = x_tick)
   }
-  print(p)
+  #print(p)
 
   return(results <- list('data' = plot_data,
                          'figure' = p))
