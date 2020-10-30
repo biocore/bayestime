@@ -16,8 +16,7 @@ plot_fpc_boxplot(
   pairwise_testing = FALSE,
   pval_show_all = FALSE,
   global_testing = FALSE,
-  p_adjust_meth = c("none", "holm", "hochberg", "hommel", "bonferroni", "BH", "BY",
-    "fdr"),
+  p_adjust_meth = "none",
   group_order = NULL
 )
 }

@@ -40,9 +40,9 @@ response <- 'shannon'
 ## plot_qqplot(): Check if data is normally distributed
 Since model fitting requires a normally distributed variable, we first need to check if the response variable needs any transformation. BayesTime::plot_qqplot() takes a dataframe and a column name of response variable to generate qqPlot of the original, log transformation, and square root of the response variable. 
 ```{r, fig.height = 6, fig.width=6, results=FALSE}
-tiff('~/Dropbox/lab/SFPCA/qqplot.tiff')
+#tiff('~/Dropbox/lab/SFPCA/qqplot.tiff')
 plot_qqplot(ECAM, 'shannon')
-dev.off()
+#dev.off()
 ```
 
 We can see that the original response vairable is more normally distributed than other transformation. So we keep the data as it is, otherwise the variable needs to be transformed.
@@ -51,7 +51,7 @@ We can see that the original response vairable is more normally distributed than
 BayesTime::plot_group() generates the spaghetti plot of one interested variable by group. This takes the logitudinal data frame, the column name of time variable, column name of response variable, column name of unique subject id and one column name from interested variables.
 ```{r, fig.height = 4, fig.width=6}
 d <- plot_group(data = ECAM, time_name = time, response_name = response,
-           unique_subject_id = unique_subject_id, variable_name = 'delivery')
+           unique_subject_id = unique_subject_id, variable_name = 'delivery')$figure
 ```
 
 ## prepare_data(): Preprocess data before modeling
@@ -60,18 +60,11 @@ BayesTime::prepare_data() transforms a dataframe object to a list for stan model
 * Attention: Each subject can only have one unqiue measurement at each time point. Function will stop and print out error message if this situation is not handled.
 
 ```{r}
-# ECAM_remove <- ECAM[!duplicated(ECAM[, c('studyid', 'month_of_life')]), ]
-# library(data.table)
-# keys <- c(unique_subject_id, time)
-# X <- as.data.table(ECAM)
-# ECAM_mean <- X[,list(shannon_mean= mean(shannon)),keys]
-# ECAM_unique <- merge(ECAM_remove, ECAM_mean, by=c(unique_subject_id, time))
 dat <- prepare_data(data = ECAM, unique_subject_id = unique_subject_id,
                     time_name = time, response_name = response, 
                     transform_y = 'standardize', scale_time = T, average = T)
 
 summary(dat)
-d<- dat$data
 ```
 
 ## stan_fit(): Get invariant variables in data
@@ -79,10 +72,10 @@ BayesTime::stan_fit() is the core function to fit longitudinal data. This takes 
 * This process may take a lot of time even if the pc and knot number are small. We recommend to save the stan modeling results to save time.
 
 ```{r}
-# stan_results <- stan_fit(sfpca_data = dat, Nsamples = 1000, Nchain = 3,
-#                         Ncores=2, PC_range = c(1:3), nknot_range = c(1:3))
+stan_results <- stan_fit(sfpca_data = dat, Nsamples = 1000, Nchain = 3,
+                        Ncores = 2, PC_range = c(1:3), nknot_range = c(1:3))
 # save(stan_results, file='~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
-load('~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
+# load('~/Dropbox/lab/SFPCA/results_pkg/stan_ECAM.RData')
 ```
 
 ## optimal(): Get the optimal model
@@ -96,13 +89,13 @@ optimal_model <- stan_results[[optimal_model_idx]]
 ## plot_k_diagnostic(): Plot diagnostic figure
 BayesTime::plot_k_diagnostic() takes data list from prepare_data() and the optimal stan model. This helps to evaluate the fitting result.***
 ```{r, fig.height = 4, fig.width=6}
-plot_k_diagnostic(sfpca_data = dat, model = optimal_model)
+plot_k_diagnostic(sfpca_data = dat, model = optimal_model)$figure
 ```
 
 ## plot_posterior_diagnostic(): Plot the figure of overlay densities
 BayesTime::plot_density_overlay() takes data list from prepare_data() and the optimal stan model. This helps to evaluate the fitting result.***
 ```{r, fig.height = 4, fig.width=6}
-plot_posterior_diagnostic(sfpca_data = dat, model = optimal_model)
+plot_posterior_diagnostic(sfpca_data = dat, model = optimal_model)$figure
 ```
 
 
@@ -134,28 +127,28 @@ BayesTime::plot_residual() takes the output from output_results() and generates 
 ## plot_mean_curve(): ***
 ```{r, fig.height = 4, fig.width=6}
 #tiff('~/Dropbox/lab/SFPCA/meancurve_plot.tiff')
-p <- plot_mean_curve(output = model_output, original = T, x_lab = 'age', y_lab = 'shannon', ymin=0, ymax=7.6)
+p <- plot_mean_curve(output = model_output, original = T, x_lab = 'age', y_lab = 'shannon')$figure
 #dev.off()
-p <- plot_mean_curve(output = model_output, original = F, x_lab = 'age', y_lab = 'shannon')
+p <- plot_mean_curve(output = model_output, original = F, x_lab = 'age', y_lab = 'shannon')$figure
 ```
 
 ## plot_fpc_curve(): 
 ```{r, fig.height = 4, fig.width=6}
-d <- plot_fpc_curve(output = model_output, pc_idx = c(1,2,3), original = T, x_tick = c(2,5,9))
-d <- plot_fpc_curve(output = model_output, pc_idx = c(2,3), original = F)
+d <- plot_fpc_curve(output = model_output, pc_idx = c(1,2,3), original = T, x_tick = c(2,5,9))$figure
+d <- plot_fpc_curve(output = model_output, pc_idx = c(2,3), original = F)$figure
 ```
 
 ## plot_fpc_on_mean_curve(): 
 ```{r, fig.height = 4, fig.width=6}
-d <- plot_fpc_on_mean_curve(output = model_output, pc_idx = 1, original = T, sd = F)
+d <- plot_fpc_on_mean_curve(output = model_output, pc_idx = 1, original = T, sd = F)$figure
      
-d <- fpc_on_mean_curve_data2 <- plot_fpc_on_mean_curve(output = model_output, pc_idx = 2, original = F, sd = T)
+d <- plot_fpc_on_mean_curve(output = model_output, pc_idx = 2, original = F, sd = T)$figure
 ```
 
 ## plot_fpc_group_mean():
 ```{r, fig.height = 4, fig.width=6}
-d <- plot_fpc_group_mean(output = model_output, pc_idx = 1, original = T, group_name = 'delivery')
-d <- plot_fpc_group_mean(output = model_output, pc_idx = 1, original = F, group_name = 'diet_3')
+d <- plot_fpc_group_mean(output = model_output, pc_idx = 1, original = T, group_name = 'delivery')$figure
+d <- plot_fpc_group_mean(output = model_output, pc_idx = 1, original = F, group_name = 'diet_3')$figure
 ```
 
 ## plot_fpc_boxplot(): Generate boxplot for fpc score by group
@@ -163,18 +156,18 @@ BayesTime::plot_fpc_boxplot() generates the boxplot of fpc scores from sfpca mod
 ```{r, fig.height = 4, fig.width=6}
 boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 1, group_name = 'diet_3',
                  testing_type = 'parametric', pairwise_testing = T, x_lab = 'group',
-                 p_adjust_meth = 'holm', pval_show_all = T)
+                 p_adjust_meth = 'holm', pval_show_all = T)$figure
 boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 1, group_name = 'diet_3',
                  testing_type = 'non-parametric', pairwise_testing = T, x_lab = 'group',
-                 p_adjust_meth = 'none', pval_show_all = T)
+                 p_adjust_meth = 'none', pval_show_all = T)$figure
 boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 1,
                                  group_name = 'diet_3', testing_type = 'parametric',
                                  pairwise_testing = F, global_testing = F,
                                  group_order = c('eb', 'fd', 'bd'), p_title = 'Boxplot',
-                                 p_adjust_meth = 'BH')
+                                 p_adjust_meth = 'BH')$figure
 boxplot_data <- plot_fpc_boxplot(output = model_output, pc_idx = 2, group_name = 'sex',
                  testing_type = 'non-parametric', pairwise_testing = T, x_lab = 'sex',
-                 p_adjust_meth = 'none', pval_show_all = T)
+                 p_adjust_meth = 'none', pval_show_all = T)$figure
 ```
 
 
@@ -189,6 +182,6 @@ invars
 BayesTime::effectSize_rda() automates the rda analysis using rda() from vegan package. This takes the output list from output_results(), stan model from optimal(), and a set of variables self-input or from invariants(). It returns the table and ggplot of the rda analysis results.
 ```{r, results=FALSE, fig.height = 4, fig.width=4}
 model_rda <- effectSize_rda(output = model_output, model = optimal_model, 
-                            variables = invars, trace=F)
+                            variables = invars, trace=F)$figure
 print(model_rda)
 ```

@@ -11,6 +11,9 @@ plot_k_diagnostic(sfpca_data, model)
 
 \item{model:}{The optimal sfpca model}
 }
+\value{
+A list with the plot
+}
 \description{
 A function to draw k diganostic plot
 }

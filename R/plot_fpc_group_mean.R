@@ -60,11 +60,10 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
   plot_data <- data.frame(time_cont * (max(time) - min(time)) + min(time))
   colnames(plot_data) <- 'time'
   for (j in 1:groups){
-      plot_data[, 1 + j] <- (Mu_functions + FPC_mean[, k] * scores_mu_g[j]) *
-        sigma_y + mu_y
-      plot_data[, 1 + j] <- as.vector(plot_data[, 1 + j])
-      colnames(plot_data)[1 + j] <- classes[j]
+      plot_data <- cbind(plot_data, as.vector(Mu_functions + FPC_mean[, k] * scores_mu_g[j] *
+        sigma_y + mu_y))
   }
+  colnames(plot_data) <- c('time', classes)
 
   plot_melt <- reshape::melt(plot_data, 'time', classes)
   p <- ggplot() +
