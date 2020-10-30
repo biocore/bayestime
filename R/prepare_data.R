@@ -17,7 +17,7 @@
 #' dat <- prepare_data(ECAM, unique_subject_id = 'studyid', time_name = 'month_of_life',
 #'                    response_name = 'shannon', transform_y='standardize', scale_time=T)
 prepare_data = function(data, unique_subject_id, time_name, response_name,
-                        transform_y = 'standardize', scale_time = FALSE,
+                        transform_y = NULL, scale_time = FALSE,
                         group_name = NULL, average = FALSE){
 
   if (!(unique_subject_id %in% colnames(data)) |
@@ -86,13 +86,15 @@ prepare_data = function(data, unique_subject_id, time_name, response_name,
 
   # transform response (code updated on 08/16/2019)
   # keep original response
-  if (transform_y == 'standardize'){
-    data$response_ori <- data[, response_name]
-    data$response <- (data[, response_name] - mean(data[, response_name], na.rm=T)) /
-      (sd(data[, response_name], na.rm=T))
-  } else if (transform_y == 'center'){
-    data$response_ori <- data[, response_name]
-    data$response <- (data[, response_name] - mean(data[, response_name], na.rm=T))
+  if (!is.null(transform_y)) {
+    if (transform_y == 'standardize'){
+      data$response_ori <- data[, response_name]
+      data$response <- (data[, response_name] - mean(data[, response_name], na.rm=T)) /
+        (sd(data[, response_name], na.rm=T))
+    } else if (transform_y == 'center'){
+      data$response_ori <- data[, response_name]
+      data$response <- (data[, response_name] - mean(data[, response_name], na.rm=T))
+    }
   } else {
     data$response_ori <- data[, response_name]
     data$response <- data[, response_name]

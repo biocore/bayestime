@@ -14,7 +14,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Biarch: true
 Depends: 
-    R (>= 3.6.3)
+    R (>= 3.6.3),
+    ggplot2 (>= 2.1.0)
 Imports: 
     methods,
     Rcpp (>= 0.12.0),

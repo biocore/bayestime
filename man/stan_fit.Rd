@@ -4,7 +4,15 @@
 \alias{stan_fit}
 \title{generate sfpca models with different parameters}
 \usage{
-stan_fit(sfpca_data, Nsamples, Nchains, Ncores = NULL, PC_range, nknot_range)
+stan_fit(
+  sfpca_data,
+  Nsamples,
+  Nchains,
+  Ncores = NULL,
+  PC_range,
+  nknot_range,
+  seed = NULL
+)
 }
 \arguments{
 \item{sfpca_data:}{The prepared data list from prepare_data() function}

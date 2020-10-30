@@ -16,7 +16,7 @@ plot_posterior_diagnostic(sfpca_data, model, x_lab = NULL, y_lab = NULL)
 \item{y_lab:}{Manually set y axis title}
 }
 \value{
-A list with the plot and the data used for plot
+A list with the plot
 }
 \description{
 A function to draw density overlay plot
