@@ -11,11 +11,12 @@
 #' @param ymax: maximum value of y axis range
 #' @param x_lab: label for x axis
 #' @param y_lab: label for y axis
+#' @export
 
 
 plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, response_name, 
                              unique_subject_id, subject_selected, 
-                             ymin, ymax, x_lab, y_lab){
+                             ymin, ymax, x_lab, y_lab, title='observed vs. predicted'){
     subject_starts = sfpca_data$visits.start
     subject_stops = sfpca_data$visits.stop
     subject_idx = which(unique(sfpca_data$data$ID) == subject_selected)
@@ -34,7 +35,7 @@ plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, respons
     time_obs = sub_data[, time_name]
     response_obs = sub_data[, response_name]
     plot(time_obs, response_obs, type='b', col='black', ylim=c(ymin, ymax), xlab=x_lab, ylab=y_lab, 
-         main='compare observed vs. predicted curves')
+         main=title, font.lab=2, cex.lab=1.2)
     lines(time_obs, (fit_curve_mean*sigma_y + mu_y), type='b', col='red')
     lines(time_obs, (fit_curve_q025*sigma_y + mu_y), type='b', col='green')
     lines(time_obs, (fit_curve_q975*sigma_y + mu_y), type='b', col='orange')
@@ -42,8 +43,11 @@ plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, respons
     legend('bottomright', c('upper95%', 'observed', 'mean', 'lower95%'), 
            col=c('orange', 'black', 'red', 'green'), lty=rep(1,5), bty='n')
     
-#     return(list('time' = time_obs, 'y_obs' = response_obs, 
-#                 'y_fit_mean' = (fit_curve_mean*sigma_y + mu_y),
-#                 'y_fit_q025' = (fit_curve_q025*sigma_y + mu_y),
-#                 'y_fit_q975' = (fit_curve_q975*sigma_y + mu_y)))          
+    p = recordPlot()
+    
+    return(results <- list('figure' = p, 'time' = time_obs, 'y_obs' = response_obs, 
+                            'y_fit_mean' = unname(fit_curve_mean*sigma_y + mu_y),
+                            'y_fit_q025' = unname(fit_curve_q025*sigma_y + mu_y),
+                            'y_fit_q975' = unname(fit_curve_q975*sigma_y + mu_y)))
+             
 }
