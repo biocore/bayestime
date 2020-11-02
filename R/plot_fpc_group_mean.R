@@ -15,6 +15,7 @@ plot_fpc_group_mean <- function(output, pc_idx, original = FALSE, group_name,
                                 x_lab = NULL, y_lab = NULL,
                                 ymin = NULL, ymax = NULL){
   data <- output$df
+  data[, group_name] <- as.factor(data[, group_name])
   K <- output$rotation$npcs
 
   if (original == TRUE){
