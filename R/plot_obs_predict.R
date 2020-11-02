@@ -16,7 +16,8 @@
 
 plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, response_name, 
                              unique_subject_id, subject_selected, 
-                             ymin, ymax, x_lab, y_lab, title='observed vs. predicted'){
+                             x_lab, y_lab, x_axis_ticks, x_axis_range, y_axis_ticks, y_axis_range,
+                             title='observed vs. predicted'){
     subject_starts = sfpca_data$visits.start
     subject_stops = sfpca_data$visits.stop
     subject_idx = which(unique(sfpca_data$data$ID) == subject_selected)
@@ -34,20 +35,30 @@ plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, respons
     sub_data = sub_data[order(sub_data[, time_name]), ]
     time_obs = sub_data[, time_name]
     response_obs = sub_data[, response_name]
-    plot(time_obs, response_obs, type='b', col='black', ylim=c(ymin, ymax), xlab=x_lab, ylab=y_lab, 
-         main=title, font.lab=2, cex.lab=1.2)
-    lines(time_obs, (fit_curve_mean*sigma_y + mu_y), type='b', col='red')
-    lines(time_obs, (fit_curve_q025*sigma_y + mu_y), type='b', col='green')
-    lines(time_obs, (fit_curve_q975*sigma_y + mu_y), type='b', col='orange')
+    y_fit_mean = unname(fit_curve_mean*sigma_y + mu_y)
+    y_fit_q025 = unname(fit_curve_q025*sigma_y + mu_y)
+    y_fit_q975 = unname(fit_curve_q975*sigma_y + mu_y)
     
-    legend('bottomright', c('upper95%', 'observed', 'mean', 'lower95%'), 
-           col=c('orange', 'black', 'red', 'green'), lty=rep(1,5), bty='n')
+    table_obs_predict = data.frame(cbind(rep(time_obs, 4), rep(c('observed', 'predicted_mean', 'predicted_q025',    
+                                                                 'predicted_q975'), each=length(time_obs)),
+                                         c(response_obs, y_fit_mean, y_fit_q025, y_fit_q975)))
+    colnames(table_obs_predict) = c('time', 'type', 'response')
+    table_obs_predict$time = as.numeric(levels(table_obs_predict$time))[table_obs_predict$time] 
+    table_obs_predict$response = as.numeric(levels(table_obs_predict$response))[table_obs_predict$response] 
     
-    p = recordPlot()
+    p <- ggplot(aes(x = time, y = response, colour = type, group=type), data = table_obs_predict) +  
+          geom_point() + geom_line() +
+        labs(title = title, x = x_lab, y = y_lab) + 
+        scale_x_continuous(limits=x_axis_range, breaks = x_axis_ticks) + 
+        scale_y_continuous(limits=y_axis_range, breaks = y_axis_ticks)+
+        theme_classic() +
+        theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+        axis.text.x = element_text(size = 10, face = "bold"),
+        axis.text.y = element_text(size = 10, face = "bold"),
+        axis.title.x = element_text(size = 12, face = "bold"),
+        axis.title.y = element_text(size = 12, face = "bold"),
+        legend.title = element_blank(), legend.position = 'top')   
     
-    return(results <- list('figure' = p, 'time' = time_obs, 'y_obs' = response_obs, 
-                            'y_fit_mean' = unname(fit_curve_mean*sigma_y + mu_y),
-                            'y_fit_q025' = unname(fit_curve_q025*sigma_y + mu_y),
-                            'y_fit_q975' = unname(fit_curve_q975*sigma_y + mu_y)))
+    return(results <- list('figure' = p, 'data' = table_obs_predict))
              
 }
