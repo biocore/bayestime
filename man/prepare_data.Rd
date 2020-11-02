@@ -9,7 +9,7 @@ prepare_data(
   unique_subject_id,
   time_name,
   response_name,
-  transform_y = "standardize",
+  transform_y = NULL,
   scale_time = FALSE,
   group_name = NULL,
   average = FALSE
