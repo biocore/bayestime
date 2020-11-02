@@ -43,8 +43,10 @@ plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, respons
                                                                  'predicted_q975'), each=length(time_obs)),
                                          c(response_obs, y_fit_mean, y_fit_q025, y_fit_q975)))
     colnames(table_obs_predict) = c('time', 'type', 'response')
-    table_obs_predict$time = as.numeric(levels(table_obs_predict$time))[table_obs_predict$time] 
-    table_obs_predict$response = as.numeric(levels(table_obs_predict$response))[table_obs_predict$response] 
+    #table_obs_predict$time = as.numeric(levels(table_obs_predict$time))[table_obs_predict$time] 
+    #table_obs_predict$response = as.numeric(levels(table_obs_predict$response))[table_obs_predict$response] 
+    table_obs_predict$time = as.numeric(table_obs_predict$time)
+    table_obs_predict$response = as.numeric(table_obs_predict$response) 
     
     p <- ggplot(aes(x = time, y = response, colour = type, group=type), data = table_obs_predict) +  
           geom_point() + geom_line() +
