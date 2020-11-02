@@ -84,10 +84,9 @@ plot_fpc_on_mean_curve <- function(output, pc_idx,
           axis.text.x = element_text(size = 10, face = "bold"),
           axis.text.y = element_text(size = 10, face = "bold"),
           axis.title.x = element_text(size = 12, face = "bold"),
-          axis.title.y = element_text(size = 12, face = "bold")) +
-    scale_color_manual(values = c("black",
-                                  "orange",
-                                   "blue" ))
+          axis.title.y = element_text(size = 12, face = "bold"),
+          legend.position = 'top') +
+    scale_color_manual(values = c("black", "orange", "blue" ))
     #scale_linetype_manual(name = 'curve',values = c("solid", "dotted", "dotted"))
   #print(p)
   return(results <- list('data' = plot_data,

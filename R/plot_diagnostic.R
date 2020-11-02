@@ -48,8 +48,7 @@ plot_k_diagnostic <- function(sfpca_data, model){
 #' @import rstan
 #' @import bayesplot
 #' @export
-plot_posterior_diagnostic <- function(sfpca_data, model,
-                                      x_lab = NULL, y_lab = NULL){
+plot_posterior_diagnostic <- function(sfpca_data, model){
   sa <- model$sa
   Nsamples <- model$Nsamples
   Nchains <- model$Nchains
@@ -73,12 +72,14 @@ plot_posterior_diagnostic <- function(sfpca_data, model,
   #plot_data <- data.frame(sfpca_data$data$response, Ynew_transform)
   p <- bayesplot::ppc_dens_overlay(sfpca_data$data$response, Ynew_transform) +
     ggplot2::ggtitle('Posterior Predictive Checking') +
-    theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
-          axis.text.x = element_text(size = 10, face = "bold"),
-          axis.text.y = element_text(size = 10, face = "bold"),
-          axis.title.x = element_text(size = 12, face = "bold"),
-          axis.title.y = element_text(size = 12, face = "bold")) +
-    labs(x = x_lab)
-  #print(p)
+    labs(x="Standardized response", y="Kernel density") +
+    theme(plot.title = element_text(hjust = 0.5, size=15, face="bold"),
+          axis.text.x= element_text(size=10, face="bold"),
+          axis.text.y= element_text(size=10, face="bold"),
+          axis.title.x= element_text(size=12, face="bold"),
+          axis.title.y= element_text(size=12, face="bold"),
+          legend.position = 'top') 
+
   return(results <- list('figure' = p))
+
 }
