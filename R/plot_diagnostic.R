@@ -67,7 +67,7 @@ plot_posterior_diagnostic <- function(sfpca_data, model){
   bayesplot::color_scheme_set("brightblue")
   k <- model$pc
   d <- model$knot
-  if (is.null(x_lab)) x_lab = 'standardized response'
+  #if (is.null(x_lab)) x_lab = 'standardized response'
   #if (is.null(y_lab)) y_lab = ''
   #plot_data <- data.frame(sfpca_data$data$response, Ynew_transform)
   p <- bayesplot::ppc_dens_overlay(sfpca_data$data$response, Ynew_transform) +
