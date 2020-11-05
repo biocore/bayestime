@@ -59,7 +59,8 @@ plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, respons
         axis.text.y = element_text(size = 10, face = "bold"),
         axis.title.x = element_text(size = 12, face = "bold"),
         axis.title.y = element_text(size = 12, face = "bold"),
-        legend.title = element_blank(), legend.position = 'top')   
+        legend.title = element_blank(), legend.position = 'top') + 
+        guides(col = guide_legend(nrow = 2, byrow = TRUE))  
     
     return(results <- list('figure' = p, 'data' = table_obs_predict))
              
