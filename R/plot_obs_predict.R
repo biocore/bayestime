@@ -16,8 +16,10 @@
 
 plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, response_name, 
                              unique_subject_id, subject_selected, 
-                             x_lab, y_lab, x_axis_ticks, x_axis_range, y_axis_ticks, y_axis_range,
-                             title='observed vs. predicted'){
+                             x_lab, y_lab, x_axis_ticks, x_axis_range, 
+                             y_axis_ticks, y_axis_range,
+                             title='observed vs. predicted',
+                             legend_show=TRUE){
     subject_starts = sfpca_data$visits.start
     subject_stops = sfpca_data$visits.stop
     subject_idx = which(unique(sfpca_data$data$ID) == subject_selected)
@@ -47,20 +49,43 @@ plot_obs_predict <- function(sfpca_data, optimal_model, data, time_name, respons
     #table_obs_predict$response = as.numeric(levels(table_obs_predict$response))[table_obs_predict$response] 
     table_obs_predict$time = as.numeric(table_obs_predict$time)
     table_obs_predict$response = as.numeric(table_obs_predict$response) 
-    
+
+
+    if (legend_show){
+        legend_position = "top"
+    }else{
+        legend_position = 'none'
+    }
     p <- ggplot(aes(x = time, y = response, colour = type, group=type), data = table_obs_predict) +  
-          geom_point() + geom_line() +
-        labs(title = title, x = x_lab, y = y_lab) + 
-        scale_x_continuous(limits=x_axis_range, breaks = x_axis_ticks) + 
-        scale_y_continuous(limits=y_axis_range, breaks = y_axis_ticks)+
-        theme_classic() +
-        theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
-        axis.text.x = element_text(size = 10, face = "bold"),
-        axis.text.y = element_text(size = 10, face = "bold"),
-        axis.title.x = element_text(size = 12, face = "bold"),
-        axis.title.y = element_text(size = 12, face = "bold"),
-        legend.title = element_blank(), legend.position = 'top') + 
-        guides(col = guide_legend(nrow = 2, byrow = TRUE))  
+            geom_point(aes(linetype=type)) + geom_line(aes(linetype=type)) + 
+            scale_linetype_manual(values=c("solid", "solid", "dashed", "dashed")) +
+            scale_color_manual(values=c("black", "red", "blue", "blue")) +
+            labs(title = title, x = x_lab, y = y_lab) + 
+            scale_x_continuous(limits=x_axis_range, breaks = x_axis_ticks) + 
+            scale_y_continuous(limits=y_axis_range, breaks = y_axis_ticks)+
+            theme_classic() +
+            theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+                  axis.text.x = element_text(size = 10, face = "bold"),
+                  axis.text.y = element_text(size = 10, face = "bold"),
+                  axis.title.x = element_text(size = 12, face = "bold"),
+                  axis.title.y = element_text(size = 12, face = "bold"),
+                  legend.title = element_blank(), legend.position =legend_position) +
+            guides(linetype = guide_legend(nrow = 2))
+
+    
+    # p <- ggplot(aes(x = time, y = response, colour = type, group=type), data = table_obs_predict) +  
+    #       geom_point() + geom_line() +
+    #     labs(title = title, x = x_lab, y = y_lab) + 
+    #     scale_x_continuous(limits=x_axis_range, breaks = x_axis_ticks) + 
+    #     scale_y_continuous(limits=y_axis_range, breaks = y_axis_ticks)+
+    #     theme_classic() +
+    #     theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+    #     axis.text.x = element_text(size = 10, face = "bold"),
+    #     axis.text.y = element_text(size = 10, face = "bold"),
+    #     axis.title.x = element_text(size = 12, face = "bold"),
+    #     axis.title.y = element_text(size = 12, face = "bold"),
+    #     legend.title = element_blank(), legend.position = 'top') + 
+    #     guides(col = guide_legend(nrow = 2, byrow = TRUE))  
     
     return(results <- list('figure' = p, 'data' = table_obs_predict))
              

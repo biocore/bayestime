@@ -62,7 +62,7 @@ plot_fpc_curve <- function(output, pc_idx, original=FALSE,
           axis.text.y = element_text(size = 10, face = "bold"),
           axis.title.x = element_text(size = 12, face = "bold"),
           axis.title.y = element_text(size = 12, face = "bold"),
-          legend.position = 'top')
+          legend.title = element_blank(), legend.position = 'top') 
 
   if (!is.null(x_tick)) {
     p <- p + scale_x_continuous(breaks = x_tick)
